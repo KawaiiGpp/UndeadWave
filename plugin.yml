@@ -10,3 +10,11 @@ permissions:
     default: true
   undeadwave.admin:
     default: op
+
+commands:
+  undeadwave:
+    permission: undeadwave.user
+    aliases: [uw]
+  undeadwaveadmin:
+    permission: undeadwave.admin
+    aliases: [uwadmin, uwa]
