@@ -24,6 +24,7 @@ public class SettingsConfig extends ConfigFile {
     }
 
     private <T> T validate(T result, Predicate<T> predicate) {
+        Validate.notNull(predicate);
         Validate.isTrue(predicate.test(result), "Invalid value from config.");
         return result;
     }

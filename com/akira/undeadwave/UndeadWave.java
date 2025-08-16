@@ -6,12 +6,16 @@ import com.akira.undeadwave.command.AdminCommandExecutor;
 import com.akira.undeadwave.command.UserCommandExecutor;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
+import com.akira.undeadwave.core.Game;
 import org.apache.commons.lang3.Validate;
+
+import java.util.List;
 
 public class UndeadWave extends AkiraPlugin {
     private static UndeadWave instance;
 
     private final ConfigManager configManager = new ConfigManager();
+    private final Game game = new Game(this);
 
     public UndeadWave() {
         instance = this;
@@ -27,6 +31,8 @@ public class UndeadWave extends AkiraPlugin {
 
         registerCommand(new AdminCommandExecutor(this));
         registerCommand(new UserCommandExecutor(this));
+
+        this.tryEnableGame();
     }
 
     public void onDisable() {
@@ -37,6 +43,20 @@ public class UndeadWave extends AkiraPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    private void tryEnableGame() {
+        logInfo("正在检查小游戏是否满足启用条件。");
+
+        List<String> tips = game.tryEnable();
+        if (!tips.isEmpty()) {
+            logWarn("未满足条件，以下是提示：");
+            tips.forEach(this::logWarn);
+        } else logInfo("已满足条件，小游戏已启用。");
     }
 
     public static UndeadWave getInstance() {

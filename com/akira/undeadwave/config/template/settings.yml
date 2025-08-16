@@ -1,3 +1,4 @@
 general:
   max_rounds: 10
-  monsters_for_each_round: 12
+  monsters_per_round: 12
+  minimum_player_amount: 1

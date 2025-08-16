@@ -1,0 +1,33 @@
+package com.akira.undeadwave.core;
+
+import org.apache.commons.lang3.Validate;
+import org.bukkit.ChatColor;
+
+public enum GameState {
+    UNAVAILABLE(ChatColor.DARK_RED, "不可用"),
+    WAITING(ChatColor.GREEN, "等待中"),
+    STARTED(ChatColor.RED, "已开始");
+
+    private final ChatColor color;
+    private final String displayName;
+
+    GameState(ChatColor color, String displayName) {
+        Validate.notNull(color);
+        Validate.notNull(displayName);
+
+        this.color = color;
+        this.displayName = displayName;
+    }
+
+    public ChatColor getColor() {
+        return color;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getColoredName() {
+        return color + displayName;
+    }
+}
