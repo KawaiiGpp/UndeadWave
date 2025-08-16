@@ -2,19 +2,29 @@ package com.akira.undeadwave.config;
 
 import com.akira.core.api.AkiraPlugin;
 import com.akira.core.api.config.ConfigFile;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.apache.commons.lang3.Validate;
+
+import java.util.function.Predicate;
 
 public class SettingsConfig extends ConfigFile {
     public SettingsConfig(AkiraPlugin plugin, String templatePath) {
         super(plugin, "settings", templatePath);
     }
 
-    public General getGeneral() {
-        YamlConfiguration config = this.getConfig();
-
-        return new General(config.getInt("general.max_round"),
-                config.getInt("general.monsters_for_each_round"));
+    public int getMaxRound() {
+        return validate(this.getConfig().getInt("general.max_round"), x -> x > 0);
     }
 
-    public record General(int maxRound, int monstersForEachRound) {}
+    public int getMonstersPerRound() {
+        return validate(this.getConfig().getInt("general.monsters_per_round"), x -> x > 0);
+    }
+
+    public int getMinimumPlayerAmount() {
+        return validate(this.getConfig().getInt("general.minimum_player_amount"), x -> x > 0);
+    }
+
+    private <T> T validate(T result, Predicate<T> predicate) {
+        Validate.isTrue(predicate.test(result), "Invalid value from config.");
+        return result;
+    }
 }
