@@ -1,16 +1,15 @@
 package com.akira.undeadwave.core;
 
 import com.akira.core.api.config.ConfigFile;
-import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Game {
     private final UndeadWave plugin;
@@ -28,23 +27,33 @@ public class Game {
 
     public void join(Player player) {
         Validate.notNull(player);
+
         this.validateAvailableState();
         this.validateState(GameState.WAITING);
 
-        Validate.isTrue(!players.contains(player), "Player already joined: " + player.getName());
+        int maxAmount = this.getSettingsConfig().getMinimumPlayerAmount();
+        Validate.isTrue(players.size() + 1 <= maxAmount, "Player amount limit reached.");
 
+        Validate.isTrue(!players.contains(player), "Player already joined: " + player.getName());
         players.add(player);
-        this.onPlayerJoin(player);
+
+        broadcast("§f玩家 §e" + player.getName() + " §f加入了游戏（" + players.size() + "/" + maxAmount + "）");
+        player.teleport(this.getLocationConfig().getSpawnpoint());
     }
 
     public void quit(Player player) {
         Validate.notNull(player);
+
         this.validateAvailableState();
+        this.validateState(s -> s.isIn(GameState.WAITING, GameState.STARTED));
 
-        Validate.isTrue(players.contains(player), "Player not contained: " + player.getName());
-
+        Validate.isTrue(players.contains(player), "Player not joined: " + player.getName());
         players.remove(player);
-        this.onPlayerQuit(player);
+
+        String amountInfo = players.size() + "/" + this.getSettingsConfig().getMinimumPlayerAmount();
+        String amountDisplay = state == GameState.WAITING ? amountInfo : "。";
+        broadcast("§f玩家 §e" + player.getName() + " §f退出了游戏" + amountDisplay);
+        player.teleport(this.getLocationConfig().getLobby());
     }
 
     public List<String> tryEnable() {
@@ -54,8 +63,8 @@ public class Game {
     }
 
     public boolean disbale() {
-        if (this.state.equals(GameState.WAITING)) {
-            this.state = GameState.UNAVAILABLE;
+        if (state.allowDisabling()) {
+            state = GameState.UNAVAILABLE;
             return true;
         } else return false;
     }
@@ -91,59 +100,22 @@ public class Game {
         return tips;
     }
 
-    private void validateState(GameState state) {
-        validateState(state, false);
+    private void validateState(Function<GameState, Boolean> function) {
+        Validate.notNull(function);
+        Validate.isTrue(function.apply(state), "Unexpected game state: " + state.name());
     }
 
-    private void validateState(GameState state, boolean reverse) {
+    private void validateState(GameState state) {
         Validate.notNull(state);
-
-        boolean condition = this.state.equals(state);
-        if (reverse) condition = !condition;
-
-        String message = reverse ?
-                "Game state cannot be: " + state.name() :
-                "Invalid game state: " + this.state + " (" + state.name() + " expected).";
-        Validate.isTrue(condition, message);
+        validateState(state::equals);
     }
 
     private void validateAvailableState() {
-        validateState(GameState.UNAVAILABLE, true);
-    }
-
-    private void onPlayerJoin(Player player) {
-        int amount = players.size();
-        int max = this.getSettingsConfig().getMinimumPlayerAmount();
-
-        player.teleport(this.getLocationConfig().getSpawnpoint());
-        this.broadcast("玩家 §a" + player.getName() + " §f加入了游戏（" + amount + "/" + max + "）。");
-    }
-
-    private void onPlayerQuit(Player player) {
-        int amount = players.size();
-        int max = this.getSettingsConfig().getMinimumPlayerAmount();
-
-        this.broadcast("玩家 §a" + player.getName() + " §f离开了游戏（" + amount + "/" + max + "）。");
-        player.teleport(this.getLocationConfig().getLobby());
+        this.validateState(GameState::isAvailable);
     }
 
     private void broadcast(String message) {
+        Validate.notNull(message);
         players.forEach(p -> p.sendMessage(message));
-    }
-
-    private void playSound(Sound sound, float pitch) {
-        players.forEach(p -> PlayerUtils.playSound(p, sound, pitch));
-    }
-
-    private void playSound(Sound sound) {
-        this.playSound(sound, 1.0F);
-    }
-
-    private void sendTitle(String title, String subTitle) {
-        players.forEach(p -> PlayerUtils.sendTitle(p, title, subTitle));
-    }
-
-    private void sendActionBarTitle(String title) {
-        players.forEach(p -> PlayerUtils.sendActionBarTitle(p, title));
     }
 }

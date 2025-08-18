@@ -7,7 +7,6 @@ import com.akira.core.api.config.ConfigFile;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.core.Game;
-import com.akira.undeadwave.core.GameState;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -44,7 +43,7 @@ public class AdminCommandExecutor extends EnhancedExecutor {
         Validate.notNull(sender);
         Game game = plugin.getGame();
 
-        if (game.getState() == GameState.UNAVAILABLE)
+        if (game.getState().isUnavailable())
             return false;
 
         sender.sendMessage("§c游戏已经启用，无法中途修改位置。");
@@ -117,7 +116,7 @@ public class AdminCommandExecutor extends EnhancedExecutor {
         protected boolean onExecute(CommandSender sender, String[] args) {
             Game game = plugin.getGame();
 
-            if (!game.getState().equals(GameState.UNAVAILABLE)) {
+            if (game.getState().isAvailable()) {
                 sender.sendMessage("§c仅当游戏不可用时才需要进行此操作。");
                 return true;
             }
@@ -140,7 +139,7 @@ public class AdminCommandExecutor extends EnhancedExecutor {
         protected boolean onExecute(CommandSender sender, String[] args) {
             Game game = plugin.getGame();
 
-            if (game.getState().equals(GameState.UNAVAILABLE)) {
+            if (game.getState().isUnavailable()) {
                 sender.sendMessage("§c游戏已经处于禁用状态了。");
                 return true;
             }
