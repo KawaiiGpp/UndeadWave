@@ -12,6 +12,7 @@ public class GameSession {
     private int coins;
     private double damageTaken;
     private double damageDealt;
+    private boolean ready;
 
     public GameSession(Player owner) {
         Validate.notNull(owner);
@@ -52,6 +53,10 @@ public class GameSession {
         this.damageDealt += damageDealt;
     }
 
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
     public int getKills() {
         return kills;
     }
@@ -70,5 +75,9 @@ public class GameSession {
 
     public double getDamageDealt() {
         return damageDealt;
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 }

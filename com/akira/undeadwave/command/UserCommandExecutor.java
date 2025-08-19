@@ -20,6 +20,7 @@ public class UserCommandExecutor extends EnhancedExecutor {
         this.plugin = plugin;
 
         registerNode(new GameJoin());
+        registerNode(new GameQuit());
     }
 
     private class GameJoin extends CommandNode {
@@ -48,6 +49,31 @@ public class UserCommandExecutor extends EnhancedExecutor {
 
             game.join(player);
             sender.sendMessage("§a你已成功加入游戏。");
+            return true;
+        }
+    }
+
+    private class GameQuit extends CommandNode {
+        public GameQuit() {
+            super(name, SenderLimit.PLAYER_ONLY, "quit", "退出游戏。");
+        }
+
+        protected boolean onExecute(CommandSender sender, String[] args) {
+            Player player = (Player) sender;
+            Game game = plugin.getGame();
+
+            if (!game.includes(player)) {
+                sender.sendMessage("§c你并不在游戏中。");
+                return true;
+            }
+
+            if (!game.getState().isIn(GameState.WAITING, GameState.STARTED)) {
+                sender.sendMessage("§c只有当游戏在空闲等待或正在运行的状态下才能退出。");
+                return true;
+            }
+
+            game.quit(player);
+            sender.sendMessage("§a你已成功退出游戏。");
             return true;
         }
     }
