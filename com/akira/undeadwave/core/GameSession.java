@@ -80,4 +80,17 @@ public class GameSession {
     public boolean isReady() {
         return ready;
     }
+
+    public GameSession copy() {
+        GameSession session = new GameSession(owner);
+
+        session.kills = this.kills;
+        session.deathes = this.deathes;
+        session.coins = this.coins;
+        session.damageTaken = this.damageTaken;
+        session.damageDealt = this.damageDealt;
+        session.ready = this.ready;
+
+        return session;
+    }
 }

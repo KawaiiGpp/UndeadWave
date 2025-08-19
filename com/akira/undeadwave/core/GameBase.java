@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class GameBase {
     protected final UndeadWave plugin;
-    protected final Map<Player, GameSession> playerMap;
+    protected final Map<Player, GameSession> sessionMap;
 
     protected GameState state;
 
@@ -25,17 +25,17 @@ public class GameBase {
 
         this.plugin = plugin;
         this.state = GameState.UNAVAILABLE;
-        this.playerMap = new HashMap<>();
+        this.sessionMap = new HashMap<>();
     }
 
     public final boolean includes(Player player) {
         Validate.notNull(player);
-        return playerMap.containsKey(player);
+        return sessionMap.containsKey(player);
     }
 
     public final boolean reachesMaxPlayer() {
         int maximum = this.getSettingsConfig().getMaximumPlayerAmount();
-        int actual = playerMap.size();
+        int actual = sessionMap.size();
 
         Validate.isTrue(actual <= maximum, "Player limit exceeded.");
         return actual == maximum;
@@ -56,6 +56,21 @@ public class GameBase {
 
     public final GameState getState() {
         return state;
+    }
+
+    public final GameSession getSession(Player player) {
+        Validate.notNull(player);
+
+        GameSession result = sessionMap.get(player);
+        Validate.notNull(result, "Session for " + player.getName() + " doesn't exist.");
+
+        return result.copy();
+    }
+
+    public final Map<Player, GameSession> getSessionMap() {
+        Map<Player, GameSession> result = new HashMap<>();
+        sessionMap.forEach((p, s) -> result.put(p, s.copy()));
+        return result;
     }
 
     protected final ConfigFile getConfig(String name) {
@@ -106,6 +121,6 @@ public class GameBase {
 
     protected final void forEachPlayer(Consumer<Player> consumer) {
         Validate.notNull(consumer);
-        playerMap.keySet().forEach(consumer);
+        sessionMap.keySet().forEach(consumer);
     }
 }
