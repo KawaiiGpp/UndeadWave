@@ -12,7 +12,6 @@ public class GameSession {
     private int coins;
     private double damageTaken;
     private double damageDealt;
-    private boolean ready;
 
     public GameSession(Player owner) {
         Validate.notNull(owner);
@@ -53,10 +52,6 @@ public class GameSession {
         this.damageDealt += damageDealt;
     }
 
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
-
     public int getKills() {
         return kills;
     }
@@ -77,10 +72,6 @@ public class GameSession {
         return damageDealt;
     }
 
-    public boolean isReady() {
-        return ready;
-    }
-
     public GameSession copy() {
         GameSession session = new GameSession(owner);
 
@@ -89,7 +80,6 @@ public class GameSession {
         session.coins = this.coins;
         session.damageTaken = this.damageTaken;
         session.damageDealt = this.damageDealt;
-        session.ready = this.ready;
 
         return session;
     }

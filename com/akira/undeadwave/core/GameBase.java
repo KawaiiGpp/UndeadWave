@@ -58,16 +58,12 @@ public class GameBase {
         return state;
     }
 
-    public final GameSession getSession(Player player) {
+    public final GameSession getSessionSnapshot(Player player) {
         Validate.notNull(player);
-
-        GameSession result = sessionMap.get(player);
-        Validate.notNull(result, "Session for " + player.getName() + " doesn't exist.");
-
-        return result.copy();
+        return this.getSessionSafely(player).copy();
     }
 
-    public final Map<Player, GameSession> getSessionMap() {
+    public final Map<Player, GameSession> getSessionMapSnapshot() {
         Map<Player, GameSession> result = new HashMap<>();
         sessionMap.forEach((p, s) -> result.put(p, s.copy()));
         return result;
@@ -100,6 +96,15 @@ public class GameBase {
         return tips;
     }
 
+    protected final GameSession getSessionSafely(Player player) {
+        Validate.notNull(player);
+
+        GameSession result = sessionMap.get(player);
+        Validate.notNull(result, "Session for " + player.getName() + " doesn't exist.");
+
+        return result;
+    }
+
     protected final void validateState(Function<GameState, Boolean> function) {
         Validate.notNull(function);
         Validate.isTrue(function.apply(state), "Unexpected game state: " + state.name());
@@ -108,10 +113,6 @@ public class GameBase {
     protected final void validateState(GameState state) {
         Validate.notNull(state);
         validateState(state::equals);
-    }
-
-    protected final void validateAvailableState() {
-        this.validateState(GameState::isAvailable);
     }
 
     protected final void broadcast(String message) {
