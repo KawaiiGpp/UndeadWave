@@ -7,10 +7,7 @@ import com.akira.undeadwave.config.SettingsConfig;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -34,13 +31,13 @@ public class Game {
         this.validateAvailableState();
         this.validateState(GameState.WAITING);
 
-        int maxAmount = this.getSettingsConfig().getMinimumPlayerAmount();
-        Validate.isTrue(playerMap.size() + 1 <= maxAmount, "Player amount limit reached.");
+        int maxAmount = this.getSettingsConfig().getMaximumPlayerAmount();
+        Validate.isTrue(playerMap.size() + 1 <= maxAmount, "Player limit exceeded.");
 
         Validate.isTrue(!playerMap.containsKey(player), "Player already joined: " + player.getName());
         playerMap.put(player, new GameSession(player));
 
-        broadcast("§f玩家 §e" + player.getName() + " §f加入了游戏（" + playerMap.size() + "/" + maxAmount + "）");
+        broadcast("§f玩家 §e" + player.getName() + " §f加入了游戏（§a" + playerMap.size() + "/" + maxAmount + "§f）");
         player.teleport(this.getLocationConfig().getSpawnpoint());
     }
 
@@ -53,10 +50,23 @@ public class Game {
         Validate.isTrue(playerMap.containsKey(player), "Player not joined: " + player.getName());
         playerMap.remove(player);
 
-        String amountInfo = playerMap.size() + "/" + this.getSettingsConfig().getMinimumPlayerAmount();
+        String amountInfo = "§f（§a" + playerMap.size() + "/" + this.getSettingsConfig().getMaximumPlayerAmount() + "§f）";
         String amountDisplay = state == GameState.WAITING ? amountInfo : "。";
         broadcast("§f玩家 §e" + player.getName() + " §f退出了游戏" + amountDisplay);
         player.teleport(this.getLocationConfig().getLobby());
+    }
+
+    public boolean includes(Player player) {
+        Validate.notNull(player);
+        return playerMap.containsKey(player);
+    }
+
+    public boolean reachesMaxPlayer() {
+        int maximum = this.getSettingsConfig().getMaximumPlayerAmount();
+        int actual = playerMap.size();
+
+        Validate.isTrue(actual <= maximum, "Player limit exceeded.");
+        return actual == maximum;
     }
 
     public List<String> tryEnable() {

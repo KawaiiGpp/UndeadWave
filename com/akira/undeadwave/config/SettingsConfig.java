@@ -19,8 +19,8 @@ public class SettingsConfig extends ConfigFile {
         return validate(this.getConfig().getInt("general.monsters_per_round"), x -> x > 0);
     }
 
-    public int getMinimumPlayerAmount() {
-        return validate(this.getConfig().getInt("general.minimum_player_amount"), x -> x > 0);
+    public int getMaximumPlayerAmount() {
+        return validate(this.getConfig().getInt("general.maximum_player_amount"), x -> x > 0);
     }
 
     private <T> T validate(T result, Predicate<T> predicate) {
