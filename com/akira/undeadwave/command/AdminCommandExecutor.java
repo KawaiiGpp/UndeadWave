@@ -7,6 +7,7 @@ import com.akira.core.api.config.ConfigFile;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.GameState;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -138,16 +139,20 @@ public class AdminCommandExecutor extends EnhancedExecutor {
 
         protected boolean onExecute(CommandSender sender, String[] args) {
             Game game = plugin.getGame();
+            GameState state = game.getState();
 
-            if (game.getState().isUnavailable()) {
+            if (state.isUnavailable()) {
                 sender.sendMessage("§c游戏已经处于禁用状态了。");
                 return true;
             }
 
-            boolean success = game.disbale();
-            if (success) sender.sendMessage("§a禁用成功，目前游戏为不可用状态。");
-            else sender.sendMessage("§c禁用失败，只有在游戏处于等待状态才能禁用。");
+            if (!state.allowDisabling()) {
+                sender.sendMessage("§c只有在游戏处于等待状态才能禁用。");
+                return true;
+            }
 
+            game.disbale();
+            sender.sendMessage("§a禁用成功，目前游戏为不可用状态。");
             return true;
         }
     }

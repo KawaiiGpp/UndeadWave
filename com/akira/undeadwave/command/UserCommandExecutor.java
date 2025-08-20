@@ -32,22 +32,12 @@ public class UserCommandExecutor extends EnhancedExecutor {
             Player player = (Player) sender;
             Game game = plugin.getGame();
 
-            if (game.includes(player)) {
-                sender.sendMessage("§c你已经在游戏中了。");
-                return true;
-            }
-
             if (game.getState() != GameState.WAITING) {
-                sender.sendMessage("§c只有游戏处于空闲等待状态下才能加入。");
+                sender.sendMessage("§c无法加入，游戏未处于空闲等待状态。");
                 return true;
             }
 
-            if (game.reachesMaxPlayer()) {
-                sender.sendMessage("§c游戏已满员，无法加入。");
-                return true;
-            }
-
-            game.join(player);
+            game.startGame(player);
             sender.sendMessage("§a你已成功加入游戏。");
             return true;
         }
@@ -62,17 +52,17 @@ public class UserCommandExecutor extends EnhancedExecutor {
             Player player = (Player) sender;
             Game game = plugin.getGame();
 
-            if (!game.includes(player)) {
-                sender.sendMessage("§c你并不在游戏中。");
+            if (game.getState() != GameState.STARTED) {
+                sender.sendMessage("§c无法退出，因为游戏并未开始。");
                 return true;
             }
 
-            if (!game.getState().isIn(GameState.WAITING, GameState.STARTED)) {
-                sender.sendMessage("§c只有当游戏在空闲等待或正在运行的状态下才能退出。");
+            if (!game.getSessionSnapshot().isOwnedBy(player)) {
+                sender.sendMessage("§c无法退出，你并不在游戏中。");
                 return true;
             }
 
-            game.quit(player);
+            game.endGame(false);
             sender.sendMessage("§a你已成功退出游戏。");
             return true;
         }

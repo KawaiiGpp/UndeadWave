@@ -20,12 +20,9 @@ public class MainListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Game game = plugin.getGame();
-        GameState state = game.getState();
+        if (game.getState() != GameState.STARTED) return;
+
         Player player = e.getPlayer();
-
-        if (!state.isIn(GameState.STARTED, GameState.WAITING)) return;
-        if (!game.includes(player)) return;
-
-        game.quit(player);
+        if (game.getSessionSnapshot().isOwnedBy(player)) game.endGame(false);
     }
 }

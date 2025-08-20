@@ -3,13 +3,10 @@ package com.akira.undeadwave.core;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.ChatColor;
 
-import java.util.Arrays;
-
 public enum GameState {
     UNAVAILABLE(ChatColor.DARK_RED, "不可用"),
     WAITING(ChatColor.GREEN, "等待中"),
-    STARTED(ChatColor.RED, "已开始"),
-    ENDING(ChatColor.GOLD, "重置中");
+    STARTED(ChatColor.RED, "已开始");
 
     private final ChatColor color;
     private final String displayName;
@@ -44,10 +41,5 @@ public enum GameState {
 
     public boolean allowDisabling() {
         return this == WAITING;
-    }
-
-    public boolean isIn(GameState... vars) {
-        Validate.noNullElements(vars);
-        return Arrays.asList(vars).contains(this);
     }
 }

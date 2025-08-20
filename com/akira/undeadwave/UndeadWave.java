@@ -32,7 +32,6 @@ public class UndeadWave extends AkiraPlugin {
 
         registerCommand(new AdminCommandExecutor(this));
         registerCommand(new UserCommandExecutor(this));
-
         registerListener(new MainListener(this));
 
         this.tryEnableGame();
