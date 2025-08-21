@@ -4,6 +4,7 @@ import com.akira.core.api.config.ConfigFile;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
+import com.akira.undeadwave.core.weapon.WeaponManager;
 import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class GameBase {
     protected final UndeadWave plugin;
+    protected final WeaponManager weaponManager;
 
     protected GameSession session;
     protected GameState state;
@@ -20,6 +22,7 @@ public class GameBase {
 
         this.plugin = plugin;
         this.state = GameState.UNAVAILABLE;
+        this.weaponManager = new WeaponManager();
     }
 
     public final List<String> tryEnable() {
@@ -50,6 +53,10 @@ public class GameBase {
 
     public final GameSession getSessionSnapshot() {
         return this.getSessionSafely().copy();
+    }
+
+    public final WeaponManager getWeaponManager() {
+        return weaponManager;
     }
 
     protected final ConfigFile getConfig(String name) {

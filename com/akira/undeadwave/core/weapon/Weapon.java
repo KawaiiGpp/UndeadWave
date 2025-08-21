@@ -2,11 +2,14 @@ package com.akira.undeadwave.core.weapon;
 
 import com.akira.core.api.item.ItemBuilder;
 import com.akira.core.api.item.ItemTagEditor;
+import com.akira.core.api.util.CommonUtils;
 import com.akira.core.api.util.NumberUtils;
 import com.akira.undeadwave.UndeadWave;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -17,38 +20,53 @@ import java.util.List;
 
 public abstract class Weapon {
     protected final WeaponType weaponType;
+    protected final WeaponAttackType attackType;
+
     protected final Material material;
     protected final String displayName;
-    protected final List<String> description;
+    protected final String[] description;
+
     protected final double damage;
+    protected final int critDamage;
+    protected final int critChance;
+
     protected final long cooldownTicks;
     protected final Particle particle;
-    protected final boolean melee;
 
-    public Weapon(WeaponType weaponType, Material material,
-                  String displayName, boolean melee,
-                  double damage, long cooldownTicks,
-                  Particle particle, String... description) {
+    public Weapon(WeaponType weaponType, WeaponAttackType attackType,
+                  Material material, String displayName, String[] description,
+                  double damage, int critDamage, int critChance,
+                  long cooldownTicks, Particle particle) {
         Validate.notNull(weaponType);
+        Validate.notNull(attackType);
         Validate.notNull(material);
         Validate.notNull(displayName);
-        Validate.noNullElements(description);
         Validate.notNull(particle);
+        Validate.noNullElements(description);
         NumberUtils.ensurePositive(damage);
+        NumberUtils.ensureNonNegative(critDamage);
+        NumberUtils.ensureNonNegative(critChance);
         NumberUtils.ensurePositive(cooldownTicks);
+        Validate.isTrue(critChance >= 0 && critChance <= 100, "Crit chance is out of range.");
 
         this.weaponType = weaponType;
+        this.attackType = attackType;
         this.material = material;
         this.displayName = displayName;
-        this.description = new ArrayList<>(Arrays.asList(description));
-        this.melee = melee;
+        this.description = description;
         this.damage = damage;
+        this.critDamage = critDamage;
+        this.critChance = critChance;
         this.cooldownTicks = cooldownTicks;
         this.particle = particle;
     }
 
     public final WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    public final WeaponAttackType getAttackType() {
+        return attackType;
     }
 
     public final Material getMaterial() {
@@ -59,12 +77,20 @@ public abstract class Weapon {
         return displayName;
     }
 
-    public final List<String> getDescription() {
-        return new ArrayList<>(description);
+    public final String[] getDescription() {
+        return description.clone();
     }
 
     public final double getDamage() {
         return damage;
+    }
+
+    public final int getCritDamage() {
+        return critDamage;
+    }
+
+    public final int getCritChance() {
+        return critChance;
     }
 
     public final long getCooldownTicks() {
@@ -75,45 +101,54 @@ public abstract class Weapon {
         return particle;
     }
 
-    public final boolean isMelee() {
-        return melee;
-    }
-
-    public final boolean matches(ItemStack item) {
-        Validate.notNull(item);
-
-        return ItemTagEditor.forItemMeta(UndeadWave.getInstance(), item)
-                .hasKey("game.weapon", PersistentDataType.BOOLEAN);
-    }
-
-    private List<String> generateItemLore() {
-        List<String> lore = new ArrayList<>();
-
-        lore.add("§f伤害：§c" + NumberUtils.format(damage) + "♥");
-        lore.add("§f冷却时间：§e" + NumberUtils.format(cooldownTicks / 2F) + "秒");
-        lore.add("");
-        lore.addAll(description);
-
-        return lore;
-    }
-
-    private ItemStack buildItem() {
-        ItemStack result =  ItemBuilder.create(material)
+    public final ItemStack buildItem() {
+        ItemStack item = ItemBuilder.create(material)
                 .addFlags(ItemFlag.values())
-                .setLore(generateItemLore().toArray(String[]::new))
+                .setLore(generateLore())
                 .setDisplayName(displayName)
                 .getResult();
 
-        ItemTagEditor editor = ItemTagEditor.forItemMeta(UndeadWave.getInstance(), result);
-        editor.set("game.weapon", PersistentDataType.BOOLEAN, true);
-        editor.set("game.weapon.name", PersistentDataType.STRING, weaponType.name());
-        editor.set("game.weapon.cooldown", PersistentDataType.LONG, cooldownTicks);
-        editor.set("game.weapon.particle", PersistentDataType.STRING, particle.name());
-        this.onItemTagSet(editor);
+        ItemTagEditor editor = ItemTagEditor.forItemMeta(UndeadWave.getInstance(), item);
+        editor.set("ingame.weapon", PersistentDataType.STRING, weaponType.name());
+        editor.apply(item);
 
-        editor.apply(result);
-        return result;
+        return item;
     }
 
-    protected abstract void onItemTagSet(ItemTagEditor editor);
+    public final boolean matchesItem(ItemStack item) {
+        Validate.notNull(item);
+        String keyName = "ingame.weapon";
+
+        ItemTagEditor editor = ItemTagEditor.forItemMeta(UndeadWave.getInstance(), item);
+        if (!editor.hasKey(keyName, PersistentDataType.STRING)) return false;
+
+        String name = editor.get(keyName, PersistentDataType.STRING);
+        WeaponType type = CommonUtils.getEnumSafely(WeaponType.class, name);
+        Validate.notNull(type, "Unknown weapon type from Item tag: " + name);
+
+        return this.weaponType == type;
+    }
+
+    private String[] generateLore() {
+        List<String> lore = new ArrayList<>();
+
+        lore.add("§f攻击伤害：§c" + NumberUtils.format(damage) + "♥");
+        if (critChance > 0) {
+            lore.add("§f暴击概率：§a" + critChance + "%");
+            if (critDamage > 0)
+                lore.add("§f暴击伤害：§a+" + critDamage + "%");
+        }
+        lore.add("§f冷却：§e" + NumberUtils.format(cooldownTicks / 20F) + "秒");
+        lore.add("");
+
+        Arrays.stream(description).forEach(line -> lore.add("§7" + line));
+        lore.add("");
+
+        lore.add(attackType.getColor() + attackType.getDisplayName() + " " + attackType.getUsage());
+        return lore.toArray(String[]::new);
+    }
+
+    public abstract void onMeleeAttack(Player attacker, LivingEntity victim);
+
+    public abstract void onRightClicked(Player player);
 }
