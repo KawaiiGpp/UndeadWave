@@ -17,9 +17,9 @@ public class Game extends GameBase {
         validateState(GameState.WAITING);
 
         player.teleport(this.getLocationConfig().getSpawnpoint());
-        this.resetPlayerStat(player);
         player.sendMessage("§a游戏已经开始！");
 
+        this.resetPlayerStat(player);
         this.session = new GameSession(player);
         this.state = GameState.STARTED;
     }
@@ -29,9 +29,9 @@ public class Game extends GameBase {
 
         Player player = this.getSessionSafely().getOwner();
         player.teleport(this.getLocationConfig().getLobby());
-        this.resetPlayerStat(player);
         player.sendMessage("§a游戏已经结束！" + (victory ? "你赢了！" : "你输了！"));
 
+        this.resetPlayerStat(player);
         this.session = null;
         this.state = GameState.WAITING;
     }

@@ -1,28 +1,23 @@
 package com.akira.undeadwave.listener;
 
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.Game;
-import com.akira.undeadwave.core.GameState;
-import org.apache.commons.lang3.Validate;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class MainListener implements Listener {
-    private final UndeadWave plugin;
-
+public class MainListener extends ListenerBase {
     public MainListener(UndeadWave plugin) {
-        Validate.notNull(plugin);
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        Game game = plugin.getGame();
-        if (game.getState() != GameState.STARTED) return;
+        if (!this.isIngamePlayer(e.getPlayer())) return;
+        plugin.getGame().endGame(false);
+    }
 
-        Player player = e.getPlayer();
-        if (game.getSessionSnapshot().isOwnedBy(player)) game.endGame(false);
+    @EventHandler
+    public void onHunger(FoodLevelChangeEvent e) {
+        if (this.isIngamePlayer(e.getEntity())) e.setFoodLevel(20);
     }
 }
