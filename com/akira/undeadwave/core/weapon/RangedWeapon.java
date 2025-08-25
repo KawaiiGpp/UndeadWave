@@ -1,12 +1,11 @@
-package com.akira.undeadwave.core.weapon.ranged;
+package com.akira.undeadwave.core.weapon;
 
 import com.akira.core.api.item.ItemTagEditor;
-import com.akira.core.api.util.*;
+import com.akira.core.api.util.CommonUtils;
+import com.akira.core.api.util.NumberUtils;
+import com.akira.core.api.util.PlayerUtils;
+import com.akira.core.api.util.WorldUtils;
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.Game;
-import com.akira.undeadwave.core.weapon.Weapon;
-import com.akira.undeadwave.core.weapon.WeaponAttackType;
-import com.akira.undeadwave.core.weapon.WeaponType;
 import com.akira.undeadwave.core.weapon.tool.ParticleSpawner;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
@@ -41,7 +40,7 @@ public abstract class RangedWeapon extends Weapon {
     protected boolean inCooldown;
     protected BukkitTask cooldownResetTask;
 
-    public RangedWeapon(UndeadWave plugin, Game game,
+    public RangedWeapon(UndeadWave plugin,
                         WeaponType weaponType, WeaponAttackType attackType,
                         Material material, String displayName, String[] description,
                         double damage, int critDamage, int critChance,
@@ -49,8 +48,7 @@ public abstract class RangedWeapon extends Weapon {
                         int maxDistance, int maxTargetAmount, double stepLength,
                         int maxDurability, double hitBoxMultiplier,
                         boolean piercing, boolean repeatHit) {
-        super(plugin, game,
-                weaponType, attackType,
+        super(plugin, weaponType, attackType,
                 material, displayName, description,
                 damage, critDamage, critChance);
         NumberUtils.ensurePositive(cooldownTicks);
@@ -72,7 +70,7 @@ public abstract class RangedWeapon extends Weapon {
         this.repeatHit = repeatHit;
     }
 
-    public RangedWeapon(UndeadWave plugin, Game game,
+    public RangedWeapon(UndeadWave plugin,
                         WeaponType weaponType, WeaponAttackType attackType,
                         Material material, String displayName, String[] description,
                         double damage, int critDamage, int critChance,
@@ -80,8 +78,7 @@ public abstract class RangedWeapon extends Weapon {
                         int maxDistance, int maxTargetAmount, double stepLength,
                         int maxDurability, double hitBoxMultiplier,
                         boolean piercing, boolean repeatHit) {
-        this(plugin, game,
-                weaponType, attackType,
+        this(plugin, weaponType, attackType,
                 material, displayName, description,
                 damage, critDamage, critChance,
                 cooldownTicks, (w, l) -> w.spawnParticle(CommonUtils.requireNonNull(particle), l, 1),
@@ -290,7 +287,7 @@ public abstract class RangedWeapon extends Weapon {
         Validate.notNull(player);
         Validate.notNull(slot);
 
-        PlayerUtils.playSound(player, Sound.BLOCK_GLASS_BREAK, 0.5F);
+        PlayerUtils.playSound(player, Sound.BLOCK_GLASS_BREAK);
 
         player.getInventory().setItem(slot, null);
         player.sendMessage(this.getItemDestroyedMessage());

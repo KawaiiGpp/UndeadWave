@@ -31,12 +31,12 @@ public abstract class Weapon {
     protected final int critDamage;
     protected final int critChance;
 
-    public Weapon(UndeadWave plugin, Game game,
+    public Weapon(UndeadWave plugin,
                   WeaponType weaponType, WeaponAttackType attackType,
                   Material material, String displayName, String[] description,
                   double damage, int critDamage, int critChance) {
         Validate.notNull(plugin);
-        Validate.notNull(game);
+        Validate.notNull(plugin.getGame());
         Validate.notNull(weaponType);
         Validate.notNull(attackType);
         Validate.notNull(material);
@@ -48,7 +48,7 @@ public abstract class Weapon {
         Validate.isTrue(critChance >= 0 && critChance <= 100, "Crit chance is out of range.");
 
         this.plugin = plugin;
-        this.game = game;
+        this.game = plugin.getGame();
         this.weaponType = weaponType;
         this.attackType = attackType;
         this.material = material;

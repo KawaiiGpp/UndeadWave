@@ -1,16 +1,15 @@
-package com.akira.undeadwave.core.weapon.melee;
+package com.akira.undeadwave.core.weapon;
 
 import com.akira.core.api.item.ItemTagEditor;
 import com.akira.core.api.util.*;
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.Game;
 import com.akira.undeadwave.core.GameState;
-import com.akira.undeadwave.core.weapon.Weapon;
-import com.akira.undeadwave.core.weapon.WeaponAttackType;
-import com.akira.undeadwave.core.weapon.WeaponType;
 import com.akira.undeadwave.core.weapon.tool.MeleeAttackData;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -30,15 +29,14 @@ public abstract class MeleeWeapon extends Weapon {
     private final int lifeStealChance;
     private final double lifeStealRatio;
 
-    public MeleeWeapon(UndeadWave plugin, Game game,
+    public MeleeWeapon(UndeadWave plugin,
                        WeaponType weaponType, WeaponAttackType attackType,
                        Material material, String displayName, String[] description,
                        double damage, int critDamage, int critChance,
                        boolean trueDamage, boolean allowSweep,
                        float velocityMultiplier, int sweepDamageBonus,
                        int lifeStealChance, double lifeStealRatio) {
-        super(plugin, game,
-                weaponType, attackType,
+        super(plugin, weaponType, attackType,
                 material, displayName, description,
                 damage, critDamage, critChance);
         NumberUtils.ensureNonNegative(velocityMultiplier);
@@ -56,7 +54,7 @@ public abstract class MeleeWeapon extends Weapon {
         this.lifeStealRatio = lifeStealRatio;
     }
 
-    public void onAttack(MeleeAttackData data) {
+    public final void onAttack(MeleeAttackData data) {
         Validate.notNull(data);
 
         Player player = data.getAttacker();
@@ -111,6 +109,8 @@ public abstract class MeleeWeapon extends Weapon {
 
     protected List<String> onItemStatsAppend() {
         List<String> list = new ArrayList<>();
+
+        list.add("§f总耐久：§b" + material.getMaxDurability());
 
         if (velocityMultiplier != 1.0)
             list.add("§f击退距离：§e" + NumberUtils.format(velocityMultiplier) + "x");

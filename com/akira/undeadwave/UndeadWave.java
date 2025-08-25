@@ -31,13 +31,13 @@ public class UndeadWave extends AkiraPlugin {
         configManager.register(new SettingsConfig(this, templatePath));
         configManager.initializeAll();
 
+        game.initializeWeapons();
+        this.tryEnableGame();
+
         registerCommand(new AdminCommandExecutor(this));
         registerCommand(new UserCommandExecutor(this));
         registerListener(new MainListener(this));
         registerListener(new WeaponListener(this));
-
-        game.initializeWeapons();
-        this.tryEnableGame();
     }
 
     public void onDisable() {
