@@ -18,7 +18,7 @@ public class WeaponManager extends Manager<Weapon> {
     public Weapon fromWeaponType(WeaponType weaponType) {
         Validate.notNull(weaponType);
         return CommonUtils.singleMatch(copySet().stream(),
-                e -> e.getWeaponType() == weaponType, false);
+                e -> e.getWeaponType() == weaponType);
     }
 
     public Weapon fromItemStack(ItemStack item) {

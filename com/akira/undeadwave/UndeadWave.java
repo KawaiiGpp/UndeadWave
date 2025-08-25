@@ -36,6 +36,7 @@ public class UndeadWave extends AkiraPlugin {
         registerListener(new MainListener(this));
         registerListener(new WeaponListener(this));
 
+        game.initializeWeapons();
         this.tryEnableGame();
     }
 

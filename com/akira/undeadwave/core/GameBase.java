@@ -5,6 +5,8 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.weapon.WeaponManager;
+import com.akira.undeadwave.core.weapon.melee.BeginnerSword;
+import com.akira.undeadwave.core.weapon.ranged.Pistol;
 import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
@@ -57,6 +59,11 @@ public class GameBase {
 
     public final WeaponManager getWeaponManager() {
         return weaponManager;
+    }
+
+    public final void initializeWeapons() {
+        weaponManager.register(new BeginnerSword(plugin));
+        weaponManager.register(new Pistol(plugin));
     }
 
     protected final ConfigFile getConfig(String name) {
