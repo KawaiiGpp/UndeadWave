@@ -2,7 +2,7 @@ package com.akira.undeadwave.core;
 
 import com.akira.core.api.util.EntityUtils;
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.weapon.WeaponType;
+import com.akira.undeadwave.core.item.weapon.WeaponType;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -33,6 +33,8 @@ public class Game extends GameBase {
         sendEndMessage(victory);
         resetPlayerStat();
         teleport(this.getLocationConfig().getLobby());
+
+        weaponManager.resetRangedWeaponCooldown();
 
         this.session = null;
         this.state = GameState.WAITING;
