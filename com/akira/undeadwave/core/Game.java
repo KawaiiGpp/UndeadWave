@@ -59,19 +59,9 @@ public class Game extends GameBase {
     private void setupStartingGears(Player player) {
         Validate.notNull(player);
 
-        giveWeapon(player, WeaponType.ANCIENT_ROCKET_LAUNCHER);
-        giveWeapon(player, WeaponType.ROCKET_LAUNCHER);
-        giveWeapon(player, WeaponType.COPPER_MINER);
-        giveWeapon(player, WeaponType.GOLD_MINER);
-        giveWeapon(player, WeaponType.NETHERITE_MINER);
-        giveWeapon(player, WeaponType.PISTOL);
-        giveWeapon(player, WeaponType.GOLD_PISTOL);
-        giveWeapon(player, WeaponType.SHOTGUN);
-        giveWeapon(player, WeaponType.DIAMOND_SHOTGUN);
-        giveWeapon(player, WeaponType.FIRE_LAUNCHER);
-        giveWeapon(player, WeaponType.LAVA_LAUNCHER);
-        giveWeapon(player, WeaponType.GAMBLER_GUN);
-        giveWeapon(player, WeaponType.FATE_GUN);
+        for (WeaponType value : WeaponType.values()) {
+            giveWeapon(player, value);
+        }
     }
 
     private void giveWeapon(Player player, WeaponType type) {

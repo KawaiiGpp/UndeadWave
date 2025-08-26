@@ -137,8 +137,8 @@ public abstract class Weapon {
 
         lore.add("§f伤害：§c" + NumberUtils.format(damage) + "♥");
         if (critChance > 0 && critDamage > 0) {
-            lore.add("§f暴击率：§a+" + critChance + "%");
             lore.add("§f暴击伤害：§a+" + critDamage + "%");
+            lore.add("§f暴击率：§a+" + critChance + "%");
         }
         lore.addAll(this.onItemStatsAppend());
         lore.add("");

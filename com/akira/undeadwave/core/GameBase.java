@@ -33,6 +33,8 @@ import com.akira.undeadwave.core.weapon.ranged.pistol.GoldPistol;
 import com.akira.undeadwave.core.weapon.ranged.pistol.Pistol;
 import com.akira.undeadwave.core.weapon.ranged.shotgun.DiamondShotgun;
 import com.akira.undeadwave.core.weapon.ranged.shotgun.Shotgun;
+import com.akira.undeadwave.core.weapon.ranged.sniper.InfernalSniper;
+import com.akira.undeadwave.core.weapon.ranged.sniper.Sniper;
 import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
@@ -128,6 +130,9 @@ public class GameBase {
 
         weaponManager.register(new RocketLauncher(plugin));
         weaponManager.register(new AncientRocketLauncher(plugin));
+
+        weaponManager.register(new Sniper(plugin));
+        weaponManager.register(new InfernalSniper(plugin));
     }
 
     protected final ConfigFile getConfig(String name) {

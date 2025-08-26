@@ -54,6 +54,18 @@ public class WeaponListener extends ListenerBase {
     }
 
     @EventHandler
+    public void onMelee(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (!this.isIngamePlayer(player)) return;
+
+        ItemStack item = e.getItem();
+        Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
+
+        if (weapon == null) return;
+        e.setCancelled(true);
+    }
+
+    @EventHandler
     public void onRanged(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if (!this.isIngamePlayer(player)) return;
