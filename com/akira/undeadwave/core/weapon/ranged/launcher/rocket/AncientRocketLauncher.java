@@ -18,7 +18,7 @@ public class AncientRocketLauncher extends RangedWeapon {
                 12, 80, 30, 50,
                 Particle.EXPLOSION_HUGE,
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 1.0F),
-                25, 8, 2, 140, 1.0,
+                25, 12, 2, 140, 1.0,
                 true, false);
     }
 }

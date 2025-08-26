@@ -19,7 +19,7 @@ public class DiamondShotgun extends RangedWeapon {
                 10, 70, 40, 30,
                 (w, l) -> WorldUtils.playParticle(l, Particle.CLOUD, 20, 1, 1, 1, 0.1),
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 2.0F),
-                4, 10, 1, 180, 2.0,
+                4, 12, 1, 180, 2.0,
                 true, true);
     }
 }

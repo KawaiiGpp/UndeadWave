@@ -18,7 +18,7 @@ public class RocketLauncher extends RangedWeapon {
                 9, 60, 30, 70,
                 Particle.EXPLOSION_HUGE,
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 1.0F),
-                15, 4, 2, 90, 1.0,
+                15, 6, 2, 90, 1.0,
                 true, false);
     }
 }

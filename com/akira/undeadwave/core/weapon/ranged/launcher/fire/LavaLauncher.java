@@ -19,7 +19,7 @@ public class LavaLauncher extends RangedWeapon {
                 10, 65, 35, 20,
                 (w, l) -> WorldUtils.playParticle(l, Particle.LAVA, 2),
                 new Tuple<>(Sound.ITEM_FIRECHARGE_USE, 1.0F),
-                15, 8, 0.5, 140, 1.0,
+                15, 12, 0.5, 140, 1.0,
                 true, false);
     }
 }

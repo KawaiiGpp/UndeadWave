@@ -18,7 +18,7 @@ public class FireLauncher extends RangedWeapon {
                 6, 50, 25, 30,
                 Particle.LAVA,
                 new Tuple<>(Sound.ITEM_FIRECHARGE_USE, 1.0F),
-                8, 4, 0.5, 100, 1.0,
+                8, 6, 0.5, 100, 1.0,
                 true, false);
     }
 }

@@ -27,6 +27,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class RangedWeapon extends Weapon {
     protected final long cooldownTicks;
@@ -172,9 +173,9 @@ public abstract class RangedWeapon extends Weapon {
     protected List<String> onItemStatsAppend() {
         List<String> list = new ArrayList<>();
 
-        list.add("§f射击距离：§a" + maxDistance + "m");
+        list.add("§f射击距离：§e" + maxDistance + "m");
         list.add("§f冷却：§e" + NumberUtils.format(cooldownTicks / 20F) + "s");
-        if (maxTargetTotal > 1) list.add("§f最大命中数：§a" + maxTargetTotal);
+        if (maxTargetTotal > 1) list.add("§f最大命中数：§d" + maxTargetTotal);
         list.add("§f总耐久：§b" + maxDurability);
 
         return list;
@@ -329,7 +330,7 @@ public abstract class RangedWeapon extends Weapon {
                 .filter(entity -> !entity.isDead())
                 .filter(entity -> entity instanceof LivingEntity)
                 .map(entity -> (LivingEntity) entity)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private boolean isBlocked(Location location) {
