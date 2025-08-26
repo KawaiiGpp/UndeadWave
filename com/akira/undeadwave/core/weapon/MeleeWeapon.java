@@ -35,14 +35,14 @@ public abstract class MeleeWeapon extends Weapon {
                        double damage, int critDamage, int critChance,
                        boolean trueDamage, boolean allowSweep,
                        float velocityMultiplier, int sweepDamageBonus,
-                       int lifeStealChance, double lifeStealRatio) {
+                       double lifeStealRatio, int lifeStealChance) {
         super(plugin, weaponType, attackType,
                 material, displayName, description,
                 damage, critDamage, critChance);
         NumberUtils.ensureNonNegative(velocityMultiplier);
         NumberUtils.ensureNonNegative(sweepDamageBonus);
-        NumberUtils.ensureNonNegative(lifeStealChance);
         NumberUtils.ensureNonNegative(lifeStealRatio);
+        NumberUtils.ensureNonNegative(lifeStealChance);
         Validate.isTrue(lifeStealChance >= 0 && lifeStealChance <= 100, "Life steal chance is out of range.");
 
         this.trueDamage = trueDamage;
@@ -50,8 +50,8 @@ public abstract class MeleeWeapon extends Weapon {
         this.velocityMultiplier = velocityMultiplier;
         this.sweepDamageBonus = sweepDamageBonus;
         this.sweepDamageModifier = 0.25;
-        this.lifeStealChance = lifeStealChance;
         this.lifeStealRatio = lifeStealRatio;
+        this.lifeStealChance = lifeStealChance;
     }
 
     public final void onAttack(MeleeAttackData data) {
@@ -66,7 +66,7 @@ public abstract class MeleeWeapon extends Weapon {
 
         if (handleAttack(damageDealt, data)) return;
         if (crit) handleCritNotification(player, victim);
-        handleLifeSteal(damageDealt, player);
+        handleLifeSteal(data.getDamage(), player);
         handleKnockback(data);
     }
 

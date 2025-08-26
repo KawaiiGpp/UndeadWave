@@ -2,11 +2,7 @@ package com.akira.undeadwave.listener;
 
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
-import com.akira.undeadwave.core.weapon.Weapon;
-import com.akira.undeadwave.core.weapon.WeaponAttackType;
-import com.akira.undeadwave.core.weapon.WeaponManager;
-import com.akira.undeadwave.core.weapon.MeleeWeapon;
-import com.akira.undeadwave.core.weapon.RangedWeapon;
+import com.akira.undeadwave.core.weapon.*;
 import com.akira.undeadwave.core.weapon.tool.MeleeAttackData;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.LivingEntity;
@@ -46,6 +42,18 @@ public class WeaponListener extends ListenerBase {
     }
 
     @EventHandler
+    public void onMelee(PlayerItemBreakEvent e) {
+        Player player = e.getPlayer();
+        if (!this.isIngamePlayer(player)) return;
+
+        ItemStack item = e.getBrokenItem();
+        Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
+        if (weapon == null) return;
+
+        player.sendMessage(weapon.getItemDestroyedMessage());
+    }
+
+    @EventHandler
     public void onRanged(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if (!this.isIngamePlayer(player)) return;
@@ -64,15 +72,19 @@ public class WeaponListener extends ListenerBase {
     }
 
     @EventHandler
-    public void onMelee(PlayerItemBreakEvent e) {
-        Player player = e.getPlayer();
-        if (!this.isIngamePlayer(player)) return;
+    public void onRanged(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof LivingEntity livingEntity)) return;
+        if (!(e.getDamager() instanceof Player player)) return;
 
-        ItemStack item = e.getBrokenItem();
-        Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
+        if (!this.isIngamePlayer(player)) return;
+        if (livingEntity.hasMetadata("ingame.ranged_weapon.targeted")) return;
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        Weapon weapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
         if (weapon == null) return;
 
-        player.sendMessage(weapon.getItemDestroyedMessage());
+        e.setCancelled(true);
+        player.sendMessage("§c枪械类武器只能用于远程射击。");
     }
 
     private void applyMeleeAttackData(EntityDamageByEntityEvent e, MeleeAttackData data) {

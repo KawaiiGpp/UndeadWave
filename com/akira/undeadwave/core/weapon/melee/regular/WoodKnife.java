@@ -1,4 +1,4 @@
-package com.akira.undeadwave.core.weapon.melee;
+package com.akira.undeadwave.core.weapon.melee.regular;
 
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.weapon.MeleeWeapon;
@@ -11,7 +11,7 @@ public class WoodKnife extends MeleeWeapon {
         super(plugin, WeaponType.WOOD_KNIFE, WeaponAttackType.MELEE,
                 Material.WOODEN_SWORD,
                 "木制匕首",
-                new String[]{"这是你的第一把武器，", "能帮助你驱魔降妖。"},
+                new String[]{"这是你的第一把剑，", "能帮助你驱魔降妖。"},
                 4, 50, 25, false, false, 1.0F, 0, 0, 0);
     }
 }

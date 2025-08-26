@@ -7,6 +7,7 @@ import com.akira.core.api.util.PlayerUtils;
 import com.akira.core.api.util.WorldUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.weapon.tool.ParticleSpawner;
+import com.akira.core.api.tool.Tuple;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -29,8 +31,9 @@ import java.util.List;
 public abstract class RangedWeapon extends Weapon {
     protected final long cooldownTicks;
     protected final ParticleSpawner particleSpawner;
+    protected final Tuple<Sound, Float> sound;
     protected final int maxDistance;
-    protected final int maxTargetAmount;
+    protected final int maxTargetTotal;
     protected final double stepLength;
     protected final int maxDurability;
     protected final double hitBoxMultiplier;
@@ -45,8 +48,9 @@ public abstract class RangedWeapon extends Weapon {
                         Material material, String displayName, String[] description,
                         double damage, int critDamage, int critChance,
                         long cooldownTicks, ParticleSpawner particleSpawner,
-                        int maxDistance, int maxTargetAmount, double stepLength,
-                        int maxDurability, double hitBoxMultiplier,
+                        Tuple<Sound, Float> sound,
+                        int maxDistance, int maxTargetTotal,
+                        double stepLength, int maxDurability, double hitBoxMultiplier,
                         boolean piercing, boolean repeatHit) {
         super(plugin, weaponType, attackType,
                 material, displayName, description,
@@ -54,15 +58,16 @@ public abstract class RangedWeapon extends Weapon {
         NumberUtils.ensurePositive(cooldownTicks);
         Validate.notNull(particleSpawner);
         NumberUtils.ensurePositive(maxDistance);
-        NumberUtils.ensurePositive(maxTargetAmount);
+        NumberUtils.ensurePositive(maxTargetTotal);
         NumberUtils.ensurePositive(stepLength);
         NumberUtils.ensurePositive(hitBoxMultiplier);
         NumberUtils.ensurePositive(maxDurability);
 
         this.cooldownTicks = cooldownTicks;
         this.particleSpawner = particleSpawner;
+        this.sound = sound != null ? sound : new Tuple<>(Sound.ENTITY_IRON_GOLEM_HURT, 2.0F);
         this.maxDistance = maxDistance;
-        this.maxTargetAmount = maxTargetAmount;
+        this.maxTargetTotal = maxTargetTotal;
         this.stepLength = stepLength;
         this.maxDurability = maxDurability;
         this.hitBoxMultiplier = hitBoxMultiplier;
@@ -75,15 +80,17 @@ public abstract class RangedWeapon extends Weapon {
                         Material material, String displayName, String[] description,
                         double damage, int critDamage, int critChance,
                         long cooldownTicks, Particle particle,
-                        int maxDistance, int maxTargetAmount, double stepLength,
-                        int maxDurability, double hitBoxMultiplier,
+                        Tuple<Sound, Float> sound,
+                        int maxDistance, int maxTargetTotal,
+                        double stepLength, int maxDurability, double hitBoxMultiplier,
                         boolean piercing, boolean repeatHit) {
         this(plugin, weaponType, attackType,
                 material, displayName, description,
                 damage, critDamage, critChance,
                 cooldownTicks, (w, l) -> w.spawnParticle(CommonUtils.requireNonNull(particle), l, 1),
-                maxDistance, maxTargetAmount, stepLength,
-                maxDurability, hitBoxMultiplier,
+                sound,
+                maxDistance, maxTargetTotal,
+                stepLength, maxDurability, hitBoxMultiplier,
                 piercing, repeatHit);
     }
 
@@ -134,8 +141,8 @@ public abstract class RangedWeapon extends Weapon {
         return maxDistance;
     }
 
-    public final int getMaxTargetAmount() {
-        return maxTargetAmount;
+    public final int getMaxTargetTotal() {
+        return maxTargetTotal;
     }
 
     public final double getStepLength() {
@@ -158,11 +165,16 @@ public abstract class RangedWeapon extends Weapon {
         return repeatHit;
     }
 
+    public final Tuple<Sound, Float> getSound() {
+        return sound;
+    }
+
     protected List<String> onItemStatsAppend() {
         List<String> list = new ArrayList<>();
 
         list.add("§f射击距离：§a" + maxDistance + "m");
         list.add("§f冷却：§e" + NumberUtils.format(cooldownTicks / 20F) + "s");
+        if (maxTargetTotal > 1) list.add("§f最大命中数：§a" + maxTargetTotal);
         list.add("§f总耐久：§b" + maxDurability);
 
         return list;
@@ -203,9 +215,7 @@ public abstract class RangedWeapon extends Weapon {
 
     private void handleShooting(Player player) {
         Validate.notNull(player);
-
-        if (piercing) PlayerUtils.playSound(player, Sound.ITEM_FLINTANDSTEEL_USE, 1.0F, 0.5F);
-        else PlayerUtils.playSound(player, Sound.ENTITY_IRON_GOLEM_HURT, 0.5F, 2.0F);
+        PlayerUtils.playSound(player, sound.getNonNullA(), 0.5F, sound.getNonNullB());
 
         Location playerLocation = player.getEyeLocation();
         Vector baseVector = playerLocation.getDirection();
@@ -213,9 +223,12 @@ public abstract class RangedWeapon extends Weapon {
         World world = playerLocation.getWorld();
         Validate.notNull(world);
 
+        int counter = 0;
         List<LivingEntity> markedEntities = new ArrayList<>();
 
-        for (double m = stepLength; m <= maxDistance; m += stepLength) {
+        for (double m = 0; m <= maxDistance; m += stepLength) {
+            if (counter >= maxTargetTotal) break;
+
             Vector clonedVector = baseVector.clone().multiply(m);
             Location location = playerLocation.clone().add(clonedVector);
 
@@ -226,7 +239,10 @@ public abstract class RangedWeapon extends Weapon {
             validEntities.removeAll(markedEntities);
             if (validEntities.isEmpty()) continue;
 
-            handleAttacking(player, validEntities);
+            this.handleAmountLimit(validEntities, counter);
+            counter += validEntities.size();
+
+            validEntities.forEach(entity -> handleEntityDamage(player, entity));
             if (!repeatHit) markedEntities.addAll(validEntities);
             if (!piercing) break;
         }
@@ -260,25 +276,20 @@ public abstract class RangedWeapon extends Weapon {
         } else return true;
     }
 
-    private void handleAttacking(Player player, List<LivingEntity> targets) {
-        Validate.notNull(player);
-        Validate.noNullElements(targets);
+    private void handleEntityDamage(Player attacker, LivingEntity entity) {
+        Validate.notNull(attacker);
+        Validate.notNull(entity);
 
         boolean crit = this.rollCritChance();
         double damageDealt = crit ? calculateCritDamage() : damage;
-        float soundPitch = crit ? 1.0F : 2.0F;
 
-        targets.forEach(entity -> handleEntityDamage(player, entity, damageDealt, crit));
-        PlayerUtils.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, soundPitch);
-    }
-
-    private void handleEntityDamage(Player attacker, LivingEntity entity, double damage, boolean crit) {
-        Validate.notNull(attacker);
-        Validate.notNull(entity);
-        NumberUtils.ensurePositive(damage);
-
-        entity.damage(damage, attacker);
+        entity.setMetadata("ingame.ranged_weapon.targeted", new FixedMetadataValue(plugin, true));
+        entity.damage(damageDealt, attacker);
+        entity.removeMetadata("ingame.ranged_weapon.targeted", plugin);
         entity.setVelocity(entity.getVelocity().clone().setY(0));
+
+        float soundPitch = crit ? 1.0F : 2.0F;
+        PlayerUtils.playSound(attacker, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, soundPitch);
 
         if (crit) WorldUtils.playParticle(entity.getEyeLocation(), Particle.FLAME, 10, 0.5);
     }
@@ -293,6 +304,18 @@ public abstract class RangedWeapon extends Weapon {
         player.sendMessage(this.getItemDestroyedMessage());
     }
 
+    private void handleAmountLimit(List<LivingEntity> list, int counter) {
+        Validate.notNull(list);
+        NumberUtils.ensureNonNegative(counter);
+
+        int limit = maxTargetTotal - counter;
+        if (limit >= list.size()) return;
+
+        List<LivingEntity> content = CommonUtils.getRandomElement(list, limit);
+        list.clear();
+        list.addAll(content);
+    }
+
     private List<LivingEntity> getValidEntities(Location location, World world) {
         Validate.notNull(location);
         Validate.notNull(world);
@@ -301,14 +324,12 @@ public abstract class RangedWeapon extends Weapon {
         BoundingBox box = BoundingBox.of(location, hitboxSize, hitboxSize, hitboxSize);
 
         Collection<Entity> entities = world.getNearbyEntities(box);
-        List<LivingEntity> filtered = entities.stream()
+        return entities.stream()
                 .filter(entity -> !(entity instanceof Player))
                 .filter(entity -> !entity.isDead())
                 .filter(entity -> entity instanceof LivingEntity)
                 .map(entity -> (LivingEntity) entity)
                 .toList();
-
-        return CommonUtils.getRandomElement(filtered, maxTargetAmount);
     }
 
     private boolean isBlocked(Location location) {

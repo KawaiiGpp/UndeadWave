@@ -1,4 +1,4 @@
-package com.akira.undeadwave.core.weapon.melee;
+package com.akira.undeadwave.core.weapon.melee.regular;
 
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.weapon.MeleeWeapon;
@@ -12,6 +12,6 @@ public class DiamondKnife extends MeleeWeapon {
                 Material.DIAMOND_SWORD,
                 "钻石匕首",
                 new String[]{"使用坚硬的钻石制成，", "虽然昂贵，但相信它值得。"},
-                8, 100, 55, false, false, 1.75F, 0, 0, 0);
+                10, 100, 55, false, false, 1.75F, 0, 0, 0);
     }
 }

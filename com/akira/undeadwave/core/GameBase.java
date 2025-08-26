@@ -5,9 +5,34 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.weapon.WeaponManager;
-import com.akira.undeadwave.core.weapon.melee.DiamondKnife;
-import com.akira.undeadwave.core.weapon.melee.IronKnife;
-import com.akira.undeadwave.core.weapon.melee.WoodKnife;
+import com.akira.undeadwave.core.weapon.melee.blood.BloodyBlade;
+import com.akira.undeadwave.core.weapon.melee.blood.VampiricBlade;
+import com.akira.undeadwave.core.weapon.melee.luck.FateSword;
+import com.akira.undeadwave.core.weapon.melee.luck.LuckySword;
+import com.akira.undeadwave.core.weapon.melee.regular.DiamondKnife;
+import com.akira.undeadwave.core.weapon.melee.regular.IronKnife;
+import com.akira.undeadwave.core.weapon.melee.regular.WoodKnife;
+import com.akira.undeadwave.core.weapon.melee.shock.ShockBlade;
+import com.akira.undeadwave.core.weapon.melee.shock.StormBlade;
+import com.akira.undeadwave.core.weapon.melee.sweep.LongSword;
+import com.akira.undeadwave.core.weapon.melee.sweep.WhirlwindSword;
+import com.akira.undeadwave.core.weapon.melee.sweep.WindSword;
+import com.akira.undeadwave.core.weapon.melee.truth.PiercingKnife;
+import com.akira.undeadwave.core.weapon.melee.truth.TrueKnife;
+import com.akira.undeadwave.core.weapon.melee.truth.TruthSword;
+import com.akira.undeadwave.core.weapon.ranged.launcher.fire.FireLauncher;
+import com.akira.undeadwave.core.weapon.ranged.launcher.fire.LavaLauncher;
+import com.akira.undeadwave.core.weapon.ranged.launcher.rocket.AncientRocketLauncher;
+import com.akira.undeadwave.core.weapon.ranged.launcher.rocket.RocketLauncher;
+import com.akira.undeadwave.core.weapon.ranged.luck.FateGun;
+import com.akira.undeadwave.core.weapon.ranged.luck.GamblerGun;
+import com.akira.undeadwave.core.weapon.ranged.miner.CopperMiner;
+import com.akira.undeadwave.core.weapon.ranged.miner.GoldMiner;
+import com.akira.undeadwave.core.weapon.ranged.miner.NetheriteMiner;
+import com.akira.undeadwave.core.weapon.ranged.pistol.GoldPistol;
+import com.akira.undeadwave.core.weapon.ranged.pistol.Pistol;
+import com.akira.undeadwave.core.weapon.ranged.shotgun.DiamondShotgun;
+import com.akira.undeadwave.core.weapon.ranged.shotgun.Shotgun;
 import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
@@ -66,6 +91,43 @@ public class GameBase {
         weaponManager.register(new WoodKnife(plugin));
         weaponManager.register(new IronKnife(plugin));
         weaponManager.register(new DiamondKnife(plugin));
+
+        weaponManager.register(new BloodyBlade(plugin));
+        weaponManager.register(new VampiricBlade(plugin));
+
+        weaponManager.register(new LuckySword(plugin));
+        weaponManager.register(new FateSword(plugin));
+
+        weaponManager.register(new LongSword(plugin));
+        weaponManager.register(new WindSword(plugin));
+        weaponManager.register(new WhirlwindSword(plugin));
+
+        weaponManager.register(new ShockBlade(plugin));
+        weaponManager.register(new StormBlade(plugin));
+
+        weaponManager.register(new PiercingKnife(plugin));
+        weaponManager.register(new TrueKnife(plugin));
+        weaponManager.register(new TruthSword(plugin));
+
+
+        weaponManager.register(new Pistol(plugin));
+        weaponManager.register(new GoldPistol(plugin));
+
+        weaponManager.register(new Shotgun(plugin));
+        weaponManager.register(new DiamondShotgun(plugin));
+
+        weaponManager.register(new FireLauncher(plugin));
+        weaponManager.register(new LavaLauncher(plugin));
+
+        weaponManager.register(new GamblerGun(plugin));
+        weaponManager.register(new FateGun(plugin));
+
+        weaponManager.register(new CopperMiner(plugin));
+        weaponManager.register(new GoldMiner(plugin));
+        weaponManager.register(new NetheriteMiner(plugin));
+
+        weaponManager.register(new RocketLauncher(plugin));
+        weaponManager.register(new AncientRocketLauncher(plugin));
     }
 
     protected final ConfigFile getConfig(String name) {
