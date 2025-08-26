@@ -1,7 +1,7 @@
 package com.akira.undeadwave.core.weapon.melee.sweep;
 
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.weapon.MeleeWeapon;
+import com.akira.undeadwave.core.weapon.base.MeleeWeapon;
 import com.akira.undeadwave.core.weapon.WeaponAttackType;
 import com.akira.undeadwave.core.weapon.WeaponType;
 import org.bukkit.Material;

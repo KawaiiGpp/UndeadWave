@@ -1,9 +1,11 @@
-package com.akira.undeadwave.core.weapon;
+package com.akira.undeadwave.core.weapon.base;
 
 import com.akira.core.api.item.ItemTagEditor;
 import com.akira.core.api.util.*;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.GameState;
+import com.akira.undeadwave.core.weapon.WeaponAttackType;
+import com.akira.undeadwave.core.weapon.WeaponType;
 import com.akira.undeadwave.core.weapon.tool.MeleeAttackData;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;

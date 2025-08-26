@@ -2,6 +2,7 @@ package com.akira.undeadwave.core.weapon;
 
 import com.akira.core.api.Manager;
 import com.akira.core.api.util.CommonUtils;
+import com.akira.undeadwave.core.weapon.base.Weapon;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.ItemStack;
 

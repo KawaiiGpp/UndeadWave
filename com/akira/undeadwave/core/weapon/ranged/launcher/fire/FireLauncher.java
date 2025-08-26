@@ -2,7 +2,7 @@ package com.akira.undeadwave.core.weapon.ranged.launcher.fire;
 
 import com.akira.core.api.tool.Tuple;
 import com.akira.undeadwave.UndeadWave;
-import com.akira.undeadwave.core.weapon.RangedWeapon;
+import com.akira.undeadwave.core.weapon.base.RangedWeapon;
 import com.akira.undeadwave.core.weapon.WeaponAttackType;
 import com.akira.undeadwave.core.weapon.WeaponType;
 import org.bukkit.Material;

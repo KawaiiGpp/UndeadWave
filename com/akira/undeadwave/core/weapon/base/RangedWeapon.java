@@ -1,4 +1,4 @@
-package com.akira.undeadwave.core.weapon;
+package com.akira.undeadwave.core.weapon.base;
 
 import com.akira.core.api.item.ItemTagEditor;
 import com.akira.core.api.util.CommonUtils;
@@ -6,6 +6,8 @@ import com.akira.core.api.util.NumberUtils;
 import com.akira.core.api.util.PlayerUtils;
 import com.akira.core.api.util.WorldUtils;
 import com.akira.undeadwave.UndeadWave;
+import com.akira.undeadwave.core.weapon.WeaponAttackType;
+import com.akira.undeadwave.core.weapon.WeaponType;
 import com.akira.undeadwave.core.weapon.tool.ParticleSpawner;
 import com.akira.core.api.tool.Tuple;
 import org.apache.commons.lang3.Validate;

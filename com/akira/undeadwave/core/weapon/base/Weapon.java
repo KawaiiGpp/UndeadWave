@@ -1,4 +1,4 @@
-package com.akira.undeadwave.core.weapon;
+package com.akira.undeadwave.core.weapon.base;
 
 import com.akira.core.api.item.ItemBuilder;
 import com.akira.core.api.item.ItemTagEditor;
@@ -6,6 +6,8 @@ import com.akira.core.api.util.CommonUtils;
 import com.akira.core.api.util.NumberUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.weapon.WeaponAttackType;
+import com.akira.undeadwave.core.weapon.WeaponType;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

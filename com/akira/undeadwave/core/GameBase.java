@@ -1,6 +1,7 @@
 package com.akira.undeadwave.core;
 
 import com.akira.core.api.config.ConfigFile;
+import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
@@ -36,6 +37,9 @@ import com.akira.undeadwave.core.weapon.ranged.shotgun.Shotgun;
 import com.akira.undeadwave.core.weapon.ranged.sniper.InfernalSniper;
 import com.akira.undeadwave.core.weapon.ranged.sniper.Sniper;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,19 +78,6 @@ public class GameBase {
         Validate.isTrue(state.allowDisabling(),
                 "Disabling now allowed in state: " + state.name());
         state = GameState.UNAVAILABLE;
-    }
-
-    public final GameState getState() {
-        Validate.notNull(state);
-        return state;
-    }
-
-    public final GameSession getSessionSnapshot() {
-        return this.getSessionSafely().copy();
-    }
-
-    public final WeaponManager getWeaponManager() {
-        return weaponManager;
     }
 
     public final void initializeWeapons() {
@@ -135,6 +126,25 @@ public class GameBase {
         weaponManager.register(new InfernalSniper(plugin));
     }
 
+    public final Player getIngamePlayer() {
+        validateState(GameState.STARTED);
+
+        return this.getSessionSafely().getOwner();
+    }
+
+    public final GameState getState() {
+        Validate.notNull(state);
+        return state;
+    }
+
+    public final GameSession getSessionSnapshot() {
+        return this.getSessionSafely().copy();
+    }
+
+    public final WeaponManager getWeaponManager() {
+        return weaponManager;
+    }
+
     protected final ConfigFile getConfig(String name) {
         Validate.notNull(name);
         return plugin.getConfigManager().fromString(name);
@@ -159,5 +169,29 @@ public class GameBase {
         String cur = state.name();
         String exp = expected.name();
         Validate.isTrue(state == expected, "Unexpected state: " + cur + " (" + exp + " expected)");
+    }
+
+    protected final void teleport(Location location) {
+        Validate.notNull(location);
+
+        this.getIngamePlayer().teleport(location);
+    }
+
+    protected final void send(String message) {
+        Validate.notNull(message);
+
+        this.getIngamePlayer().sendMessage(message);
+    }
+
+    protected final void playSound(Sound sound, float volume, float pitch) {
+        PlayerUtils.playSound(this.getIngamePlayer(), sound, volume, pitch);
+    }
+
+    protected final void playSound(Sound sound, float pitch) {
+        playSound(sound, 0.5F, pitch);
+    }
+
+    protected final void playSound(Sound sound) {
+        playSound(sound, 1.0F);
     }
 }
