@@ -5,6 +5,7 @@ import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
+import com.akira.undeadwave.core.enemy.EnemyManager;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
 import com.akira.undeadwave.core.item.weapon.melee.blood.VampiricBlade;
@@ -46,7 +47,9 @@ import java.util.List;
 
 public class GameBase {
     protected final UndeadWave plugin;
+
     protected final WeaponManager weaponManager;
+    protected final EnemyManager enemyManager;
 
     protected GameSession session;
     protected GameState state;
@@ -57,7 +60,9 @@ public class GameBase {
 
         this.plugin = plugin;
         this.state = GameState.UNAVAILABLE;
+
         this.weaponManager = new WeaponManager();
+        this.enemyManager = new EnemyManager();
     }
 
     public final List<String> tryEnable() {
@@ -126,6 +131,8 @@ public class GameBase {
         weaponManager.register(new Sniper(plugin));
         weaponManager.register(new InfernalSniper(plugin));
     }
+
+    public final void initializeEnemies() {}
 
     public final Player getIngamePlayer() {
         validateState(GameState.STARTED);
