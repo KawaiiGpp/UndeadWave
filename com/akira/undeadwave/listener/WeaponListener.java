@@ -9,6 +9,7 @@ import com.akira.undeadwave.core.item.weapon.base.RangedWeapon;
 import com.akira.undeadwave.core.item.weapon.base.Weapon;
 import com.akira.undeadwave.core.item.weapon.tool.MeleeAttackData;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,13 +27,12 @@ public class WeaponListener extends ListenerBase {
 
     @EventHandler
     public void onMelee(EntityDamageByEntityEvent e) {
-        DamageCause cause = e.getCause();
-        if (cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_SWEEP_ATTACK) return;
-
         if (!(e.getDamager() instanceof Player player)) return;
-        if (!(e.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (plugin.getGame().getEnemyManager().fromEntity(livingEntity) == null) return;
         if (!this.isIngamePlayer(player)) return;
+        if (this.cancelInvalidAttack(e)) return;
+
+        LivingEntity livingEntity = (LivingEntity) e.getEntity();
+        DamageCause cause = e.getCause();
 
         ItemStack item = player.getInventory().getItemInMainHand();
         Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
@@ -146,5 +146,19 @@ public class WeaponListener extends ListenerBase {
         if (!clz.isAssignableFrom(weapon.getClass())) return null;
 
         return weapon;
+    }
+
+    private boolean cancelInvalidAttack(EntityDamageByEntityEvent event) {
+        Validate.notNull(event);
+
+        Entity victim = event.getEntity();
+        DamageCause cause = event.getCause();
+
+        boolean shouldCancel = !(victim instanceof LivingEntity livingEntity)
+                || (plugin.getGame().getEnemyManager().fromEntity(livingEntity) == null)
+                || (cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_SWEEP_ATTACK);
+        if (shouldCancel) event.setCancelled(true);
+
+        return shouldCancel;
     }
 }
