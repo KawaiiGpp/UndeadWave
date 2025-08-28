@@ -1,5 +1,6 @@
 package com.akira.undeadwave.listener;
 
+import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
 import com.akira.undeadwave.core.item.weapon.WeaponAttackType;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,6 +37,8 @@ public class WeaponListener extends ListenerBase {
         DamageCause cause = e.getCause();
 
         ItemStack item = player.getInventory().getItemInMainHand();
+        if (this.cancelIfNothingInHand(player, item, e)) return;
+
         Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
         if (weapon == null) return;
 
@@ -157,8 +161,16 @@ public class WeaponListener extends ListenerBase {
         boolean shouldCancel = !(victim instanceof LivingEntity livingEntity)
                 || (plugin.getGame().getEnemyManager().fromEntity(livingEntity) == null)
                 || (cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_SWEEP_ATTACK);
-        if (shouldCancel) event.setCancelled(true);
 
-        return shouldCancel;
+        return EventUtils.cancelIf(shouldCancel, event);
+    }
+
+    private boolean cancelIfNothingInHand(Player player, ItemStack item, Cancellable event) {
+        Validate.notNull(player);
+        Validate.notNull(item);
+        Validate.notNull(event);
+
+        return EventUtils.cancelIf(item.getType().isAir(), event,
+                () -> player.sendMessage("§c你必须手持武器才能攻击。"));
     }
 }

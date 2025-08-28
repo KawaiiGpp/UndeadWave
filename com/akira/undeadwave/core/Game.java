@@ -2,8 +2,10 @@ package com.akira.undeadwave.core;
 
 import com.akira.core.api.util.EntityUtils;
 import com.akira.undeadwave.UndeadWave;
+import com.akira.undeadwave.core.enemy.EnemyType;
 import com.akira.undeadwave.core.item.weapon.WeaponType;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -25,6 +27,8 @@ public class Game extends GameBase {
         resetPlayerStat();
         sendStartMessage();
         setupStartingGears();
+
+        spawnTestEnemy();
     }
 
     public void endGame(boolean victory) {
@@ -73,5 +77,11 @@ public class Game extends GameBase {
     private void sendEndMessage(boolean victory) {
         playSound(victory ? Sound.ENTITY_ENDER_DRAGON_GROWL : Sound.ENTITY_WITHER_DEATH);
         send("§a游戏结束，" + (victory ? "恭喜你赢了！" : "很遗憾你输了！"));
+    }
+
+    private void spawnTestEnemy() {
+        Location location = this.getLocationConfig().getSpawnpoint();
+
+        enemyManager.fromType(EnemyType.COMMON_ZOMBIE).spawn(location);
     }
 }

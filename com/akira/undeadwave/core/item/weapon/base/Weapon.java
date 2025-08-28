@@ -42,6 +42,7 @@ public abstract class Weapon {
         Validate.notNull(weaponType);
         Validate.notNull(attackType);
         Validate.notNull(material);
+        Validate.isTrue(material.isItem(), "Unsupported material to build an item: " + material.name());
         Validate.notNull(displayName);
         Validate.noNullElements(description);
         NumberUtils.ensurePositive(damage);
@@ -78,6 +79,7 @@ public abstract class Weapon {
 
     public final boolean matchesItem(ItemStack item) {
         Validate.notNull(item);
+        if (!item.getType().isItem()) return false;
         String keyName = "ingame.weapon";
 
         ItemTagEditor editor = ItemTagEditor.forItemMeta(plugin, item);
