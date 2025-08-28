@@ -82,6 +82,6 @@ public class Game extends GameBase {
     private void spawnTestEnemy() {
         Location location = this.getLocationConfig().getSpawnpoint();
 
-        enemyManager.fromType(EnemyType.COMMON_ZOMBIE).spawn(location);
+        enemyManager.fromType(EnemyType.COMMON_SKELETON).spawn(location);
     }
 }

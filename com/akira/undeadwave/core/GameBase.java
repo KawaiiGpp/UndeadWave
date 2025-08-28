@@ -6,6 +6,7 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.enemy.EnemyManager;
+import com.akira.undeadwave.core.enemy.skeleton.CommonSkeleton;
 import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
@@ -135,6 +136,7 @@ public class GameBase {
 
     public final void initializeEnemies() {
         enemyManager.register(new CommonZombie(plugin));
+        enemyManager.register(new CommonSkeleton(plugin));
     }
 
     public final Player getIngamePlayer() {
