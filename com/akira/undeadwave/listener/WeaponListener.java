@@ -22,36 +22,65 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("unchecked")
 public class WeaponListener extends ListenerBase {
     public WeaponListener(UndeadWave plugin) {
         super(plugin);
     }
 
     @EventHandler
-    public void onMelee(EntityDamageByEntityEvent e) {
+    public void onEntityDamaged(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Player player)) return;
         if (!this.isIngamePlayer(player)) return;
         if (this.cancelInvalidAttack(e)) return;
 
-        LivingEntity livingEntity = (LivingEntity) e.getEntity();
-        DamageCause cause = e.getCause();
-
         ItemStack item = player.getInventory().getItemInMainHand();
         if (this.cancelIfNothingInHand(player, item, e)) return;
+        LivingEntity victim = (LivingEntity) e.getEntity();
 
-        Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
-        if (weapon == null) return;
+        MeleeWeapon meleeWeapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
+        if (meleeWeapon != null) {
+            DamageCause cause = e.getCause();
+            boolean sweep = cause == DamageCause.ENTITY_SWEEP_ATTACK;
+            MeleeAttackData data = new MeleeAttackData(player, victim, sweep);
 
-        boolean sweep = cause == DamageCause.ENTITY_SWEEP_ATTACK;
-        MeleeAttackData data = new MeleeAttackData(player, livingEntity, sweep);
-        MeleeWeapon meleeWeapon = (MeleeWeapon) weapon;
+            meleeWeapon.onAttack(data);
+            this.applyMeleeAttackData(e, data);
+            return;
+        }
 
-        meleeWeapon.onAttack(data);
-        this.applyMeleeAttackData(e, data);
+        RangedWeapon rangedWeapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
+        if (rangedWeapon != null) {
+            if (victim.hasMetadata("ingame.ranged_weapon.targeted")) return;
+
+            e.setCancelled(true);
+            player.sendMessage("§c枪械类武器只能用于远程射击。");
+            return;
+        }
+
+        e.setCancelled(true);
+        player.sendMessage("§c你无法通过此途径攻击实体。");
     }
 
     @EventHandler
-    public void onMelee(PlayerItemBreakEvent e) {
+    public void onInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (!this.isIngamePlayer(player)) return;
+
+        e.setCancelled(true);
+        ItemStack item = e.getItem();
+
+        RangedWeapon rangedWeapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
+        if (rangedWeapon == null) return;
+
+        Action action = e.getAction();
+        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
+
+        rangedWeapon.onShoot(player, e.getItem(), e.getHand());
+    }
+
+    @EventHandler
+    public void onItemBreak(PlayerItemBreakEvent e) {
         Player player = e.getPlayer();
         if (!this.isIngamePlayer(player)) return;
 
@@ -60,52 +89,6 @@ public class WeaponListener extends ListenerBase {
         if (weapon == null) return;
 
         player.sendMessage(weapon.getItemDestroyedMessage());
-    }
-
-    @EventHandler
-    public void onMelee(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        if (!this.isIngamePlayer(player)) return;
-
-        ItemStack item = e.getItem();
-        Weapon weapon = parseItem(item, WeaponAttackType.MELEE, MeleeWeapon.class);
-
-        if (weapon == null) return;
-        e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onRanged(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        if (!this.isIngamePlayer(player)) return;
-
-        ItemStack item = e.getItem();
-        Weapon weapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
-
-        if (weapon == null) return;
-        e.setCancelled(true);
-
-        Action action = e.getAction();
-        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
-
-        RangedWeapon rangedWeapon = (RangedWeapon) weapon;
-        rangedWeapon.onShoot(player, e.getItem(), e.getHand());
-    }
-
-    @EventHandler
-    public void onRanged(EntityDamageByEntityEvent e) {
-        if (!(e.getEntity() instanceof LivingEntity livingEntity)) return;
-        if (!(e.getDamager() instanceof Player player)) return;
-
-        if (!this.isIngamePlayer(player)) return;
-        if (livingEntity.hasMetadata("ingame.ranged_weapon.targeted")) return;
-
-        ItemStack item = player.getInventory().getItemInMainHand();
-        Weapon weapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
-        if (weapon == null) return;
-
-        e.setCancelled(true);
-        player.sendMessage("§c枪械类武器只能用于远程射击。");
     }
 
     private void applyMeleeAttackData(EntityDamageByEntityEvent e, MeleeAttackData data) {
@@ -136,7 +119,7 @@ public class WeaponListener extends ListenerBase {
         e.setDamage(0);
     }
 
-    private <T extends Weapon> Weapon parseItem(ItemStack item, WeaponAttackType type, Class<T> clz) {
+    private <T extends Weapon> T parseItem(ItemStack item, WeaponAttackType type, Class<T> clz) {
         Validate.notNull(type);
         Validate.notNull(clz);
         if (item == null) return null;
@@ -147,9 +130,9 @@ public class WeaponListener extends ListenerBase {
 
         if (weapon == null) return null;
         if (weapon.getAttackType() != type) return null;
-        if (!clz.isAssignableFrom(weapon.getClass())) return null;
+        if (!clz.isInstance(weapon)) return null;
 
-        return weapon;
+        return (T) weapon;
     }
 
     private boolean cancelInvalidAttack(EntityDamageByEntityEvent event) {
