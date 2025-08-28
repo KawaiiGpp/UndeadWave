@@ -25,7 +25,7 @@ public class EnemyEquipmentPreset {
 
     public ItemStack[] getArmorSet() {
         return armorSet == null ?
-                null :
+                new ItemStack[0] :
                 Arrays.stream(armorSet).map(this::toItem).toArray(ItemStack[]::new);
     }
 
