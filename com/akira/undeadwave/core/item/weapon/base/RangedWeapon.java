@@ -331,6 +331,7 @@ public abstract class RangedWeapon extends Weapon {
                 .filter(entity -> !(entity instanceof Player))
                 .filter(entity -> !entity.isDead())
                 .filter(entity -> entity instanceof LivingEntity)
+                .filter(entity -> game.getEnemyManager().fromEntity(entity) != null)
                 .map(entity -> (LivingEntity) entity)
                 .collect(Collectors.toList());
     }

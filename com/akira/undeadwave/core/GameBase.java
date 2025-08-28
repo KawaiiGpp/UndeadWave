@@ -156,6 +156,10 @@ public class GameBase {
         return weaponManager;
     }
 
+    public final EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+
     protected final ConfigFile getConfig(String name) {
         Validate.notNull(name);
         return plugin.getConfigManager().fromString(name);

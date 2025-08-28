@@ -2,7 +2,8 @@ package com.akira.undeadwave.listener;
 
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
-import com.akira.undeadwave.core.item.weapon.*;
+import com.akira.undeadwave.core.item.weapon.WeaponAttackType;
+import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.base.MeleeWeapon;
 import com.akira.undeadwave.core.item.weapon.base.RangedWeapon;
 import com.akira.undeadwave.core.item.weapon.base.Weapon;
@@ -30,6 +31,7 @@ public class WeaponListener extends ListenerBase {
 
         if (!(e.getDamager() instanceof Player player)) return;
         if (!(e.getEntity() instanceof LivingEntity livingEntity)) return;
+        if (plugin.getGame().getEnemyManager().fromEntity(livingEntity) == null) return;
         if (!this.isIngamePlayer(player)) return;
 
         ItemStack item = player.getInventory().getItemInMainHand();
