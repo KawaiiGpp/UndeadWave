@@ -127,6 +127,6 @@ public abstract class Enemy<T extends Monster> {
         Validate.notNull(entity);
 
         applyScalingModifier(entity, Attribute.GENERIC_MOVEMENT_SPEED, "speed_bonus", enemyType.getSpeedBonus() / 100.0);
-        EntityUtils.getNonNullAttribute(entity, Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(enemyType.getBaseDamage());
+        EntityUtils.setMaxHealth(entity, enemyType.getMaxHealth());
     }
 }

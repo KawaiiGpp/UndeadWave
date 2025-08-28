@@ -7,6 +7,7 @@ import com.akira.undeadwave.command.UserCommandExecutor;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.listener.EnemyListener;
 import com.akira.undeadwave.listener.MainListener;
 import com.akira.undeadwave.listener.WeaponListener;
 import org.apache.commons.lang3.Validate;
@@ -38,8 +39,10 @@ public class UndeadWave extends AkiraPlugin {
 
         registerCommand(new AdminCommandExecutor(this));
         registerCommand(new UserCommandExecutor(this));
+
         registerListener(new MainListener(this));
         registerListener(new WeaponListener(this));
+        registerListener(new EnemyListener(this));
     }
 
     public void onDisable() {
