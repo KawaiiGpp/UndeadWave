@@ -1,6 +1,7 @@
 package com.akira.undeadwave.core.enemy;
 
 import com.akira.core.api.tool.MetadataEditor;
+import com.akira.core.api.util.CommonUtils;
 import com.akira.core.api.util.EntityUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
@@ -13,6 +14,7 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.metadata.MetadataValue;
 
 public abstract class Enemy<T extends Monster> {
     protected final UndeadWave plugin;
@@ -46,13 +48,28 @@ public abstract class Enemy<T extends Monster> {
 
         entity.setRemoveWhenFarAway(false);
         entity.setMaximumNoDamageTicks(0);
-        MetadataEditor.create(plugin, entity).set("ingame.enemy", enemyType);
+        MetadataEditor.create(plugin, entity).set("ingame.enemy", enemyType.name());
 
         this.applyEquipmentPreset(entity);
         this.applyAttribute(entity);
         this.doEntityPresets(entity);
 
         return entity;
+    }
+
+    public final boolean matches(Monster monster) {
+        Validate.notNull(monster);
+        if (!typeClass.isInstance(monster)) return false;
+
+        String key = "ingame.enemy";
+        MetadataEditor editor = MetadataEditor.create(plugin, monster);
+        if (!editor.has(key)) return false;
+
+        MetadataValue value = CommonUtils.requireNonNull(editor.get(key));
+        EnemyType type = CommonUtils.getEnumSafely(EnemyType.class, value.asString());
+        Validate.notNull(type, "Failed parsing enemy type: " + monster.getType().name());
+
+        return type == enemyType;
     }
 
     public final EntityType getEntityType() {

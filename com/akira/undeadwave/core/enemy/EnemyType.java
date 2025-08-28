@@ -3,7 +3,7 @@ package com.akira.undeadwave.core.enemy;
 import com.akira.core.api.util.NumberUtils;
 
 public enum EnemyType {
-    ;
+    COMMON_ZOMBIE(4, 0, 1);
 
     private final double baseDamage;
     private final int speedBonus;

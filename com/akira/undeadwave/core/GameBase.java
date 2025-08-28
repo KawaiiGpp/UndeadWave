@@ -6,6 +6,7 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.enemy.EnemyManager;
+import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
 import com.akira.undeadwave.core.item.weapon.melee.blood.VampiricBlade;
@@ -132,7 +133,9 @@ public class GameBase {
         weaponManager.register(new InfernalSniper(plugin));
     }
 
-    public final void initializeEnemies() {}
+    public final void initializeEnemies() {
+        enemyManager.register(new CommonZombie(plugin));
+    }
 
     public final Player getIngamePlayer() {
         validateState(GameState.STARTED);
