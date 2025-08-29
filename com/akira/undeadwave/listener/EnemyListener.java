@@ -1,18 +1,20 @@
 package com.akira.undeadwave.listener;
 
+import com.akira.core.api.util.EntityUtils;
 import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
 import com.akira.undeadwave.core.enemy.Enemy;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class EnemyListener extends ListenerBase {
     public EnemyListener(UndeadWave plugin) {
@@ -21,20 +23,56 @@ public class EnemyListener extends ListenerBase {
 
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent e) {
-        if (!(e.getEntity() instanceof Player player)) return;
-        if (!this.isIngamePlayer(player)) return;
-
         Monster monster = this.parseDamager(e.getDamager());
         if (monster == null) return;
+
         Enemy<?> enemy = this.parseEnemy(monster);
         if (enemy == null) return;
 
-        e.setDamage(enemy.getEnemyType().getBaseDamage());
+        Entity entity = e.getEntity();
+        if (entity instanceof Player player) {
+            if (!this.isIngamePlayer(player)) return;
+
+            e.setDamage(enemy.getEnemyType().getBaseDamage());
+            return;
+        }
+
+        e.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onReinforcement(CreatureSpawnEvent e) {
         EventUtils.cancelIf(e.getSpawnReason().equals(SpawnReason.REINFORCEMENTS), e);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onTargetChange(EntityTargetLivingEntityEvent e) {
+        if (!(e.getEntity() instanceof Monster monster)) return;
+
+        Enemy<?> enemy = this.parseEnemy(monster);
+        if (enemy == null) return;
+
+        LivingEntity target = e.getTarget();
+        if (EventUtils.cancelUnless(target instanceof Player, e)) return;
+
+        Player player = (Player) e.getTarget();
+        if (this.isIngamePlayer(player)) return;
+
+        e.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onShoot(ProjectileLaunchEvent e) {
+        Projectile projectile = e.getEntity();
+
+        Monster monster = this.parseDamager(projectile);
+        if (monster == null) return;
+
+        Enemy<?> enemy = this.parseEnemy(monster);
+        if (enemy == null) return;
+
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskLater(plugin, () -> EntityUtils.removeIfValid(projectile), 40);
     }
 
     private Enemy<?> parseEnemy(Entity entity) {

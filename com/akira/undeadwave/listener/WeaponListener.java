@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings("unchecked")
@@ -74,7 +75,9 @@ public class WeaponListener extends ListenerBase {
         if (rangedWeapon == null) return;
 
         Action action = e.getAction();
+        EquipmentSlot hand = e.getHand();
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
+        if (hand != EquipmentSlot.HAND) return;
 
         rangedWeapon.onShoot(player, e.getItem(), e.getHand());
     }
