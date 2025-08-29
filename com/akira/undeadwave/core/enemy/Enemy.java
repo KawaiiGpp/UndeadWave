@@ -121,6 +121,13 @@ public abstract class Enemy<T extends Monster> {
 
         equipment.setItemInMainHand(preset.getWeapon());
         equipment.setArmorContents(preset.getArmorSet());
+
+        equipment.setHelmetDropChance(0);
+        equipment.setChestplateDropChance(0);
+        equipment.setLeggingsDropChance(0);
+        equipment.setBootsDropChance(0);
+        equipment.setItemInMainHandDropChance(0);
+        equipment.setItemInOffHandDropChance(0);
     }
 
     private void applyAttribute(T entity) {
