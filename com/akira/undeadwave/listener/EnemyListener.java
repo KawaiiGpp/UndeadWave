@@ -9,11 +9,8 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class EnemyListener extends ListenerBase {
@@ -73,6 +70,16 @@ public class EnemyListener extends ListenerBase {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTaskLater(plugin, () -> EntityUtils.removeIfValid(projectile), 40);
+    }
+
+    @EventHandler
+    public void onDeath(EntityDeathEvent e) {
+        LivingEntity victim = e.getEntity();
+        Enemy<?> enemy = this.parseEnemy(victim);
+        if (enemy == null) return;
+
+        e.setDroppedExp(0);
+        e.getDrops().clear();
     }
 
     private Enemy<?> parseEnemy(Entity entity) {
