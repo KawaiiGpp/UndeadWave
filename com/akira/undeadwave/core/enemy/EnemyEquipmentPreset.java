@@ -7,30 +7,46 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 public class EnemyEquipmentPreset {
-    private final Material weapon;
-    private final Material[] armorSet;
+    private final ItemStack weapon;
+    private final ItemStack[] armorSet;
 
     public EnemyEquipmentPreset(Material weapon, Material[] armorSet) {
-        if (armorSet != null)
-            Arrays.stream(armorSet).forEach(this::validate);
+        Validate.notNull(armorSet);
+        Arrays.stream(armorSet).forEach(this::validate);
         validate(weapon);
 
-        this.weapon = weapon;
-        this.armorSet = armorSet == null ? null : armorSet.clone();
+        this.weapon = this.toItem(weapon);
+        this.armorSet = Arrays.stream(armorSet).map(this::toItem).toArray(ItemStack[]::new);
+    }
+
+    public EnemyEquipmentPreset(ItemStack weapon, ItemStack[] armorSet) {
+        Validate.notNull(armorSet);
+        Arrays.stream(armorSet).map(i -> i == null ? null : i.getType()).forEach(this::validate);
+        if (weapon != null) validate(weapon.getType());
+
+        this.weapon = cloneItem(weapon);
+        this.armorSet = cloneItems(armorSet);
     }
 
     public ItemStack getWeapon() {
-        return toItem(weapon);
+        return cloneItem(weapon);
     }
 
     public ItemStack[] getArmorSet() {
-        return armorSet == null ?
-                new ItemStack[0] :
-                Arrays.stream(armorSet).map(this::toItem).toArray(ItemStack[]::new);
+        return cloneItems(armorSet);
     }
 
     private ItemStack toItem(Material material) {
         return material == null ? null : new ItemStack(material);
+    }
+
+    private ItemStack cloneItem(ItemStack item) {
+        return item == null ? null : item.clone();
+    }
+
+    private ItemStack[] cloneItems(ItemStack[] items) {
+        Validate.notNull(items);
+        return Arrays.stream(items).map(this::cloneItem).toArray(ItemStack[]::new);
     }
 
     private void validate(Material material) {
