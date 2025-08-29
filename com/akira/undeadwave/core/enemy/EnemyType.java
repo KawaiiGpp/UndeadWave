@@ -4,25 +4,8 @@ import com.akira.core.api.util.NumberUtils;
 import org.apache.commons.lang3.Validate;
 
 public enum EnemyType {
-    COMMON_ZOMBIE(20, 6, 0, 1, 5, false, 10), // 1~5
-    GOLD_ZOMBIE(20, 9, 15, 5, 10, false, 10), // 5~10
-    IRON_ZOMBIE(20, 12, 30, 10, false, 10), // 10+
-
-    SPEED_ZOMBIE(20, 6, 50, 5, 10, false, 3), // 5~10
-    LIGHTNING_ZOMBIE(20, 10, 100, 10, false, 3), // 10+
-
-    ROCK_ZOMBIE(30, 4, -25, 5, 10, false, 6), // 5~10
-    TANK_ZOMBIE(40, 8, -50, 10, false, 6), // 10+
-    HEALTHY_ZOMBIE(60, 8, 15, 12, false, 4), // 12+
-    TERMINATOPR_ZOMBIE(30, 16, 15, 12, false, 2), // 12+
-
-
-    COMMON_SKELETON(20, 4, 0, 1, 5, true, 6), // 1~5
-    GOLD_SKELETON(20, 6, 15, 5, 10, true, 6), // 5~10
-    IRON_SKELETON(20, 9, 30, 10, true, 6), // 10+
-
-    TANK_SKELETON(40, 6, -25, 8, true, 3), // 8+
-    TERMINATOR_SKELETON(30, 13, 20, 12, true, 1); // 12+
+    COMMON_ZOMBIE(20, 6, 0, 1, false, 10),
+    COMMON_SKELETON(20, 4, 0, 1, true, 6);
 
     private final double maxHealth;
     private final double baseDamage;
