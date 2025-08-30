@@ -12,7 +12,7 @@ public class SettingsConfig extends ConfigFile {
     }
 
     public int getMaxRound() {
-        return validate(this.getConfig().getInt("general.max_round"), x -> x > 0);
+        return validate(this.getConfig().getInt("general.max_rounds"), x -> x > 0);
     }
 
     public int getMonstersPerRound() {
