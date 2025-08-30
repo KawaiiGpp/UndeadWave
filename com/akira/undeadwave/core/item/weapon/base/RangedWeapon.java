@@ -314,7 +314,7 @@ public abstract class RangedWeapon extends Weapon {
         int limit = maxTargetTotal - counter;
         if (limit >= list.size()) return;
 
-        List<LivingEntity> content = CommonUtils.getRandomElement(list, limit);
+        List<LivingEntity> content = CommonUtils.getRandomElements(list, limit);
         list.clear();
         list.addAll(content);
     }
