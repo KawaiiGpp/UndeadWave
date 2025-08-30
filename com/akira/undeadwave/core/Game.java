@@ -18,7 +18,7 @@ public class Game extends GameBase {
         Validate.notNull(player);
         validateState(GameState.WAITING);
 
-        this.session = new GameSession(player);
+        this.session = new GameSession(plugin, player);
         this.state = GameState.STARTED;
 
         teleport(this.getLocationConfig().getSpawnpoint());

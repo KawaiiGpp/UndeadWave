@@ -22,6 +22,6 @@ public abstract class ListenerBase implements Listener {
 
         Game game = plugin.getGame();
         if (game.getState() != GameState.STARTED) return false;
-        return game.getSessionSnapshot().isOwnedBy(player);
+        return game.getSession().isOwnedBy(player);
     }
 }

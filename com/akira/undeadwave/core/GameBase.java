@@ -55,7 +55,6 @@ public class GameBase {
 
     protected GameSession session;
     protected GameState state;
-    protected GameRound round;
 
     protected GameBase(UndeadWave plugin) {
         Validate.notNull(plugin);
@@ -142,7 +141,7 @@ public class GameBase {
     public final Player getIngamePlayer() {
         validateState(GameState.STARTED);
 
-        return this.getSessionSafely().getOwner();
+        return this.getSession().getOwner();
     }
 
     public final GameState getState() {
@@ -150,8 +149,9 @@ public class GameBase {
         return state;
     }
 
-    public final GameSession getSessionSnapshot() {
-        return this.getSessionSafely().copy();
+    public final GameSession getSession() {
+        Validate.notNull(session, "Session is currently null.");
+        return session;
     }
 
     public final WeaponManager getWeaponManager() {
@@ -173,11 +173,6 @@ public class GameBase {
 
     protected final SettingsConfig getSettingsConfig() {
         return (SettingsConfig) this.getConfig("settings");
-    }
-
-    protected final GameSession getSessionSafely() {
-        Validate.notNull(session, "Session is currently null.");
-        return session;
     }
 
     protected final void validateState(GameState expected) {

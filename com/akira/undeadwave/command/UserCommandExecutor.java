@@ -57,7 +57,7 @@ public class UserCommandExecutor extends EnhancedExecutor {
                 return true;
             }
 
-            if (!game.getSessionSnapshot().isOwnedBy(player)) {
+            if (!game.getSession().isOwnedBy(player)) {
                 sender.sendMessage("§c无法退出，你并不在游戏中。");
                 return true;
             }
