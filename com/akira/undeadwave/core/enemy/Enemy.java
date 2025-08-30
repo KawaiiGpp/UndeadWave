@@ -48,6 +48,7 @@ public abstract class Enemy<T extends Monster> {
 
         entity.setRemoveWhenFarAway(false);
         entity.setMaximumNoDamageTicks(0);
+        entity.setPersistent(true);
         MetadataEditor.create(plugin, entity).set("ingame.enemy", enemyType.name());
 
         this.applyEquipmentPreset(entity);
