@@ -138,12 +138,6 @@ public class GameBase {
         enemyManager.register(new CommonSkeleton(plugin));
     }
 
-    public final Player getIngamePlayer() {
-        validateState(GameState.STARTED);
-
-        return this.getSession().getOwner();
-    }
-
     public final GameState getState() {
         Validate.notNull(state);
         return state;
@@ -160,6 +154,12 @@ public class GameBase {
 
     public final EnemyManager getEnemyManager() {
         return enemyManager;
+    }
+
+    protected final Player getIngamePlayer() {
+        validateState(GameState.STARTED);
+
+        return this.getSession().getOwner();
     }
 
     protected final ConfigFile getConfig(String name) {
