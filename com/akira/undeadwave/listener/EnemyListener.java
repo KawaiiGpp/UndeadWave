@@ -80,6 +80,9 @@ public class EnemyListener extends ListenerBase {
 
         e.setDroppedExp(0);
         e.getDrops().clear();
+
+        Game game = plugin.getGame();
+        game.handleEnemyKilled(victim.getUniqueId());
     }
 
     private Enemy<?> parseEnemy(Entity entity) {

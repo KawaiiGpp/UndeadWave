@@ -36,7 +36,7 @@ public class GameSession {
         this.maxRound = this.getSettingsConfig().getMaxRound();
     }
 
-    public void nextRound() {
+    public void increaseRoundCounter() {
         Validate.isTrue(aliveEnemies.isEmpty(),
                 "Enemies still alive: " + aliveEnemies.size() + " left.");
         Validate.isTrue(currentRound < maxRound,
@@ -66,6 +66,10 @@ public class GameSession {
 
     public boolean isMaxRoundReached() {
         return currentRound == maxRound;
+    }
+
+    public boolean isRoundCleared() {
+        return aliveEnemies.isEmpty();
     }
 
     public Player getOwner() {
