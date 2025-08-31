@@ -8,7 +8,7 @@ import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.enemy.EnemyManager;
 import com.akira.undeadwave.core.enemy.skeleton.CommonSkeleton;
 import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
-import com.akira.undeadwave.core.item.consumable.ConsumableItemManger;
+import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
 import com.akira.undeadwave.core.item.weapon.melee.blood.VampiricBlade;
@@ -53,7 +53,7 @@ public class GameBase {
 
     protected final WeaponManager weaponManager;
     protected final EnemyManager enemyManager;
-    protected final ConsumableItemManger consumableItemManger;
+    protected final ConsumableItemManager consumableItemManager;
 
     protected GameSession session;
     protected GameState state;
@@ -66,7 +66,7 @@ public class GameBase {
 
         this.weaponManager = new WeaponManager();
         this.enemyManager = new EnemyManager();
-        this.consumableItemManger = new ConsumableItemManger();
+        this.consumableItemManager = new ConsumableItemManager();
     }
 
     public final List<String> tryEnable() {
@@ -159,6 +159,10 @@ public class GameBase {
 
     public final EnemyManager getEnemyManager() {
         return enemyManager;
+    }
+
+    public final ConsumableItemManager getConsumableItemManager() {
+        return consumableItemManager;
     }
 
     protected final Player getIngamePlayer() {

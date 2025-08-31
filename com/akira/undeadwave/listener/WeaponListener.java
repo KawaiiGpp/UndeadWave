@@ -3,6 +3,8 @@ package com.akira.undeadwave.listener;
 import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.item.consumable.ConsumableItem;
+import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
 import com.akira.undeadwave.core.item.weapon.WeaponAttackType;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.base.MeleeWeapon;
@@ -71,15 +73,22 @@ public class WeaponListener extends ListenerBase {
         e.setCancelled(true);
         ItemStack item = e.getItem();
 
-        RangedWeapon rangedWeapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
-        if (rangedWeapon == null) return;
-
         Action action = e.getAction();
         EquipmentSlot hand = e.getHand();
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
         if (hand != EquipmentSlot.HAND) return;
 
-        rangedWeapon.onShoot(player, e.getItem(), e.getHand());
+        RangedWeapon rangedWeapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
+        if (rangedWeapon != null) {
+            rangedWeapon.onShoot(player, item, hand);
+            return;
+        }
+
+        ConsumableItem consumableItem = parseConsumableItem(item);
+        if (consumableItem != null) {
+            consumableItem.consume(player, item, hand);
+            return;
+        }
     }
 
     @EventHandler
@@ -136,6 +145,14 @@ public class WeaponListener extends ListenerBase {
         if (!clz.isInstance(weapon)) return null;
 
         return (T) weapon;
+    }
+
+    private ConsumableItem parseConsumableItem(ItemStack item) {
+        Validate.notNull(item);
+
+        Game game = plugin.getGame();
+        ConsumableItemManager manager = game.getConsumableItemManager();
+        return manager.fromItemStack(item);
     }
 
     private boolean cancelInvalidAttack(EntityDamageByEntityEvent event) {

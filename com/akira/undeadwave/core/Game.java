@@ -49,7 +49,7 @@ public class Game extends GameBase {
         teleport(this.getLocationConfig().getLobby());
 
         weaponManager.resetRangedWeaponCooldown();
-        consumableItemManger.resetCooldown();
+        consumableItemManager.resetCooldown();
         if (!victory) this.removeExistingEnemies();
 
         this.session = null;

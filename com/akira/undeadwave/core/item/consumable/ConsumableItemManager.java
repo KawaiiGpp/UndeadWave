@@ -5,7 +5,7 @@ import com.akira.core.api.util.CommonUtils;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.ItemStack;
 
-public class ConsumableItemManger extends Manager<ConsumableItem> {
+public class ConsumableItemManager extends Manager<ConsumableItem> {
     public ConsumableItem fromString(String string) {
         Validate.notNull(string);
 
