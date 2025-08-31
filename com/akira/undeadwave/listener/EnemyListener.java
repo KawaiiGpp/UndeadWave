@@ -39,7 +39,7 @@ public class EnemyListener extends ListenerBase {
 
     @EventHandler(ignoreCancelled = true)
     public void onReinforcement(CreatureSpawnEvent e) {
-        EventUtils.cancelIf(e.getSpawnReason().equals(SpawnReason.REINFORCEMENTS), e);
+        EventUtils.cancelIf(e.getSpawnReason() == SpawnReason.REINFORCEMENTS, e);
     }
 
     @EventHandler(ignoreCancelled = true)
