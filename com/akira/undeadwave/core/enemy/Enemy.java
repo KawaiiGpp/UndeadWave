@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.inventory.EntityEquipment;
@@ -51,6 +52,7 @@ public abstract class Enemy<T extends Monster> {
         entity.setPersistent(true);
         MetadataEditor.create(plugin, entity).set("ingame.enemy", enemyType.name());
 
+        this.setAdultIfAgeable(entity);
         this.applyEquipmentPreset(entity);
         this.applyAttribute(entity);
         this.doEntityPresets(entity);
@@ -136,5 +138,12 @@ public abstract class Enemy<T extends Monster> {
 
         applyScalingModifier(entity, Attribute.GENERIC_MOVEMENT_SPEED, "speed_bonus", enemyType.getSpeedBonus() / 100.0);
         EntityUtils.setMaxHealth(entity, enemyType.getMaxHealth());
+    }
+
+    private void setAdultIfAgeable(T entity) {
+        Validate.notNull(entity);
+
+        if (!(entity instanceof Ageable ageable)) return;
+        ageable.setAdult();
     }
 }
