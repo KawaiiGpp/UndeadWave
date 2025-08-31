@@ -1,6 +1,9 @@
 package com.akira.undeadwave.listener;
 
 import com.akira.undeadwave.UndeadWave;
+import com.akira.undeadwave.config.LocationConfig;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,6 +21,15 @@ public class MainListener extends ListenerBase {
 
     @EventHandler
     public void onHunger(FoodLevelChangeEvent e) {
-        if (this.isIngamePlayer(e.getEntity())) e.setFoodLevel(20);
+        if (!(e.getEntity() instanceof Player player)) return;
+
+        LocationConfig config = (LocationConfig) plugin
+                .getConfigManager()
+                .fromString("location");
+        World world = player.getWorld();
+
+        if (world.equals(config.getLobby().getWorld())
+                || this.isIngamePlayer(player))
+            e.setFoodLevel(20);
     }
 }
