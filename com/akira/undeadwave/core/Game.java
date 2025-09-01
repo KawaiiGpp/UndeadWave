@@ -105,6 +105,7 @@ public class Game extends GameBase {
             Location location = CommonUtils.getRandomElement(locations.getMonsterPoints());
 
             Monster monster = enemyManager.fromType(type).spawn(location);
+            monster.setTarget(this.getIngamePlayer());
             this.session.addAliveEnemy(monster.getUniqueId());
         }
     }
@@ -131,6 +132,7 @@ public class Game extends GameBase {
                 .map(PotionEffect::getType)
                 .forEach(player::removePotionEffect);
         player.getInventory().clear();
+        player.closeInventory();
 
         EntityUtils.setMaxHealth(player, 20);
         player.setHealth(EntityUtils.getMaxHealth(player));

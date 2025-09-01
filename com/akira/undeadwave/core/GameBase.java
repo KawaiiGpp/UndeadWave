@@ -149,6 +149,7 @@ public class GameBase {
         consumableItemManager.register(new EnergySteak(plugin));
         consumableItemManager.register(new HealingApple(plugin));
         consumableItemManager.register(new UltimateHealingApple(plugin));
+        consumableItemManager.register(new SpeedSoup(plugin));
 
         consumableItemManager.register(new FrozenFeather(plugin));
         consumableItemManager.register(new FrozenMushroom(plugin));

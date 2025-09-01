@@ -21,13 +21,18 @@ public class FrozenFeather extends ConsumableItem {
     }
 
     protected void onConsume(Player player) {
+        int duration = 5 * 20;
+        String keyName = "ingame.enemy.attack_reduction";
+
         List<Monster> list = player.getNearbyEntities(15, 8, 15)
                 .stream()
                 .filter(e -> e instanceof Monster)
                 .map(e -> (Monster) e)
                 .filter(e -> plugin.getGame().getEnemyManager().fromMonster(e) != null)
                 .toList();
-        list.forEach(this::applyEffect);
+
+        list.forEach(e -> applyEffect(e, duration, keyName));
+        startMetadataRemoveTask(list, duration, keyName);
 
         player.sendMessage("§f附近共 §b" + list.size() + " §f名怪物受到了冲击。");
     }
@@ -36,21 +41,24 @@ public class FrozenFeather extends ConsumableItem {
         return List.of("轻抖羽毛，散发出魔法寒气，", "减缓周围15格内怪物的行动，", "并削弱其攻击伤害。");
     }
 
-    private void applyEffect(Monster monster) {
+    private void applyEffect(Monster monster, int duration, String keyName) {
         WorldUtils.playParticle(
                 monster.getEyeLocation(),
                 Particle.BLOCK_CRACK,
                 5, 0.3, 0.3, 0.3, 1,
                 Material.WHITE_WOOL.createBlockData());
-        int duration = 5 * 20;
+
         monster.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, 1, false, true, false));
+        MetadataEditor.create(plugin, monster).set(keyName, 0.65);
+    }
 
-        MetadataEditor editor = MetadataEditor.create(plugin, monster);
-        String keyName = "ingame.enemy.attack_reduction";
-        editor.set(keyName, 0.65);
-
+    private void startMetadataRemoveTask(List<Monster> list, int duration, String keyName) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (monster.isValid()) editor.remove(keyName);
+            list.forEach(e -> {
+                if (!e.isValid()) return;
+
+                MetadataEditor.create(plugin, e).remove(keyName);
+            });
         }, duration);
     }
 }

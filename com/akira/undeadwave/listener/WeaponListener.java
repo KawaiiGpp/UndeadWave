@@ -13,6 +13,8 @@ import com.akira.undeadwave.core.item.weapon.base.RangedWeapon;
 import com.akira.undeadwave.core.item.weapon.base.Weapon;
 import com.akira.undeadwave.core.item.weapon.tool.MeleeAttackData;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -80,6 +82,9 @@ public class WeaponListener extends ListenerBase {
         EquipmentSlot hand = e.getHand();
         if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
         if (hand != EquipmentSlot.HAND) return;
+
+        boolean opened = this.handleShopOpen(e.getClickedBlock(), player);
+        if (opened) return;
 
         RangedWeapon rangedWeapon = parseItem(item, WeaponAttackType.RANGED, RangedWeapon.class);
         if (rangedWeapon != null) {
@@ -178,5 +183,14 @@ public class WeaponListener extends ListenerBase {
 
         return EventUtils.cancelIf(item.getType().isAir(), event,
                 () -> player.sendMessage("§c你必须手持武器才能攻击。"));
+    }
+
+    private boolean handleShopOpen(Block block, Player player) {
+        if (block == null) return false;
+        Validate.notNull(player);
+        if (block.getType() != Material.COMMAND_BLOCK) return false;
+
+        plugin.getGuiManager().fromString("shop").open(player);
+        return true;
     }
 }

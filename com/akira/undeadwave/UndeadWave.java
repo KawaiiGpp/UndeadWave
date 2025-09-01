@@ -2,12 +2,15 @@ package com.akira.undeadwave;
 
 import com.akira.core.api.AkiraPlugin;
 import com.akira.core.api.config.ConfigManager;
+import com.akira.core.api.gui.GuiManager;
 import com.akira.undeadwave.command.AdminCommandExecutor;
 import com.akira.undeadwave.command.UserCommandExecutor;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.shop.ShopGui;
 import com.akira.undeadwave.listener.EnemyListener;
+import com.akira.undeadwave.listener.MainGuiListener;
 import com.akira.undeadwave.listener.MainListener;
 import com.akira.undeadwave.listener.WeaponListener;
 import org.apache.commons.lang3.Validate;
@@ -19,6 +22,7 @@ public class UndeadWave extends AkiraPlugin {
 
     private final ConfigManager configManager = new ConfigManager();
     private final Game game = new Game(this);
+    private final GuiManager guiManager = new GuiManager();
 
     public UndeadWave() {
         instance = this;
@@ -36,6 +40,8 @@ public class UndeadWave extends AkiraPlugin {
         game.initializeEnemies();
         game.initializeConsumableItems();
 
+        guiManager.register(new ShopGui(this));
+
         this.tryEnableGame();
 
         registerCommand(new AdminCommandExecutor(this));
@@ -44,6 +50,7 @@ public class UndeadWave extends AkiraPlugin {
         registerListener(new MainListener(this));
         registerListener(new WeaponListener(this));
         registerListener(new EnemyListener(this));
+        registerListener(new MainGuiListener(this, guiManager));
     }
 
     public void onDisable() {
@@ -58,6 +65,10 @@ public class UndeadWave extends AkiraPlugin {
 
     public Game getGame() {
         return game;
+    }
+
+    public GuiManager getGuiManager() {
+        return guiManager;
     }
 
     private void tryEnableGame() {
