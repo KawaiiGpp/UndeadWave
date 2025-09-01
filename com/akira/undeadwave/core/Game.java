@@ -19,7 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class Game extends GameBase {
@@ -115,9 +117,14 @@ public class Game extends GameBase {
 
     private EnemyType randomEnemyType(int randomPoint) {
         NumberUtils.ensurePositive(randomPoint);
+        Validate.notNull(session);
+
+        int round = session.getCurrentRound();
+        List<EnemyType> filtered = new ArrayList<>(Arrays.asList(EnemyType.values()));
+        filtered.removeIf(e -> round < e.getAvailableRoundFrom() || round > e.getAvailableRoundTo());
 
         int counter = 0;
-        for (EnemyType value : EnemyType.values()) {
+        for (EnemyType value : filtered) {
             int weight = value.getWeight();
             NumberUtils.ensurePositive(weight);
 

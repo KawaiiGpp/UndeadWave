@@ -4,8 +4,8 @@ import com.akira.core.api.util.NumberUtils;
 import org.apache.commons.lang3.Validate;
 
 public enum EnemyType {
-    COMMON_ZOMBIE(20, 6, 0, 1, false, 10, 5),
-    COMMON_SKELETON(20, 4, 0, 1, true, 6, 5);
+    COMMON_ZOMBIE(20, 6, 0, 1, 10, 5),
+    COMMON_SKELETON(20, 4, 0, 1, 6, 5);
 
     private final double maxHealth;
     private final double baseDamage;
@@ -14,13 +14,12 @@ public enum EnemyType {
     private final int availableRoundFrom;
     private final int availableRoundTo;
 
-    private final boolean rangedAttacker;
     private final int weight;
     private final int coins;
 
     EnemyType(double maxHealth, double baseDamage, int speedBonus,
               int availableRoundFrom, int availableRoundTo,
-              boolean rangedAttacker, int weight, int coins) {
+              int weight, int coins) {
         NumberUtils.ensurePositive(maxHealth);
         NumberUtils.ensurePositive(baseDamage);
         NumberUtils.ensurePositive(availableRoundFrom);
@@ -36,17 +35,14 @@ public enum EnemyType {
         this.availableRoundFrom = availableRoundFrom;
         this.availableRoundTo = availableRoundTo;
 
-        this.rangedAttacker = rangedAttacker;
         this.weight = weight;
         this.coins = coins;
     }
 
     EnemyType(double maxHealth, double baseDamage, int speedBonus,
-              int availableRoundFrom,
-              boolean rangedAttacker, int weight, int coins) {
-        this(maxHealth, baseDamage, speedBonus,
-                availableRoundFrom, Integer.MAX_VALUE,
-                rangedAttacker, weight, coins);
+              int availableRoundFrom, int weight, int coins) {
+        this(maxHealth, baseDamage, speedBonus, availableRoundFrom,
+                Integer.MAX_VALUE, weight, coins);
     }
 
     public double getMaxHealth() {
@@ -67,10 +63,6 @@ public enum EnemyType {
 
     public int getAvailableRoundTo() {
         return availableRoundTo;
-    }
-
-    public boolean isRangedAttacker() {
-        return rangedAttacker;
     }
 
     public int getWeight() {
