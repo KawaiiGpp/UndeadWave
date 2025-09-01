@@ -7,6 +7,7 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -93,7 +94,7 @@ public abstract class Enemy<T extends Monster> {
         Validate.notNull(name);
         Validate.notNull(operation);
 
-        AttributeModifier modifier = EntityUtils.createModifier("undeadwave.enemy." + name, amount, operation);
+        AttributeModifier modifier = EntityUtils.createModifier("undeadwave.ingame.enemy." + name, amount, operation);
         EntityUtils.addModifier(entity, type, modifier);
     }
 
@@ -116,8 +117,9 @@ public abstract class Enemy<T extends Monster> {
     private void applyEquipmentPreset(T entity) {
         Validate.notNull(entity);
 
-        EnemyEquipmentPreset preset = this.getEquipmentPreset();
-        if (preset == null) return;
+        EnemyEquipmentPreset temp = this.getEquipmentPreset();
+        EnemyEquipmentPreset preset = temp != null ? temp :
+                new EnemyEquipmentPreset(null, new Material[]{null, null, null, null});
 
         EntityEquipment equipment = entity.getEquipment();
         Validate.notNull(equipment, "Entity not available for equipment: " + entityType);

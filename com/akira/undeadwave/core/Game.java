@@ -135,6 +135,9 @@ public class Game extends GameBase {
         EntityUtils.setMaxHealth(player, 20);
         player.setHealth(EntityUtils.getMaxHealth(player));
 
+        player.setAbsorptionAmount(0);
+        player.setArrowsInBody(0);
+
         player.setExp(0);
         player.setLevel(0);
     }

@@ -1,5 +1,6 @@
 package com.akira.undeadwave.listener;
 
+import com.akira.core.api.tool.MetadataEditor;
 import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
@@ -60,6 +61,8 @@ public class WeaponListener extends ListenerBase {
             player.sendMessage("§c枪械类武器只能用于远程射击。");
             return;
         }
+
+        if (MetadataEditor.create(plugin, victim).has("ingame.enemy.ability_attack")) return;
 
         e.setCancelled(true);
         player.sendMessage("§c你无法通过此途径攻击实体。");
@@ -148,7 +151,7 @@ public class WeaponListener extends ListenerBase {
     }
 
     private ConsumableItem parseConsumableItem(ItemStack item) {
-        Validate.notNull(item);
+        if (item == null) return null;
 
         Game game = plugin.getGame();
         ConsumableItemManager manager = game.getConsumableItemManager();

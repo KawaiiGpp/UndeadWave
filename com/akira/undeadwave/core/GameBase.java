@@ -9,6 +9,10 @@ import com.akira.undeadwave.core.enemy.EnemyManager;
 import com.akira.undeadwave.core.enemy.skeleton.CommonSkeleton;
 import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
+import com.akira.undeadwave.core.item.consumable.ability.*;
+import com.akira.undeadwave.core.item.consumable.armor.DiamondArmor;
+import com.akira.undeadwave.core.item.consumable.armor.IronArmor;
+import com.akira.undeadwave.core.item.consumable.armor.LeatherArmor;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
 import com.akira.undeadwave.core.item.weapon.melee.blood.VampiricBlade;
@@ -141,7 +145,18 @@ public class GameBase {
         enemyManager.register(new CommonSkeleton(plugin));
     }
 
-    public final void initializeConsumableItems() {}
+    public final void initializeConsumableItems() {
+        consumableItemManager.register(new EnergySteak(plugin));
+        consumableItemManager.register(new HealingApple(plugin));
+        consumableItemManager.register(new UltimateHealingApple(plugin));
+
+        consumableItemManager.register(new FrozenFeather(plugin));
+        consumableItemManager.register(new FrozenMushroom(plugin));
+
+        consumableItemManager.register(new LeatherArmor(plugin));
+        consumableItemManager.register(new IronArmor(plugin));
+        consumableItemManager.register(new DiamondArmor(plugin));
+    }
 
     public final GameState getState() {
         Validate.notNull(state);

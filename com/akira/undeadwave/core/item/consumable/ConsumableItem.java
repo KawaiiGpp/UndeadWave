@@ -3,10 +3,12 @@ package com.akira.undeadwave.core.item.consumable;
 import com.akira.core.api.item.ItemBuilder;
 import com.akira.core.api.item.ItemTagEditor;
 import com.akira.core.api.util.CommonUtils;
+import com.akira.core.api.util.NumberUtils;
 import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -19,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ConsumableItem {
-    private final UndeadWave plugin;
-    private final ConsumableItemType type;
+    protected final UndeadWave plugin;
+    protected final ConsumableItemType type;
 
     private BukkitTask cooldownTask;
     private boolean inCooldown;
@@ -38,7 +40,13 @@ public abstract class ConsumableItem {
         Validate.notNull(item);
         Validate.notNull(slot);
 
-        if (inCooldown) return;
+        if (inCooldown) {
+            player.sendMessage("§c道具冷却中，暂时无法使用。");
+            return;
+        }
+
+        PlayerUtils.playSound(player, type.getSound(), type.getSoundPitch());
+        player.sendMessage("§f你使用了 §d" + type.getDisplayName() + "§f。");
         this.onConsume(player);
 
         PlayerInventory inventory = player.getInventory();
@@ -46,11 +54,10 @@ public abstract class ConsumableItem {
         if (amount > 1) item.setAmount(amount - 1);
         else inventory.setItem(slot, null);
 
-        PlayerUtils.playSound(player, type.getSound(), type.getSoundPitch());
-        player.sendMessage("§f你使用了 §a" + type.getDisplayName() + "§f。");
-
         inCooldown = true;
-        cooldownTask = Bukkit.getScheduler().runTask(plugin, () -> inCooldown = false);
+        cooldownTask = Bukkit.getScheduler().runTaskLater(plugin,
+                () -> inCooldown = false,
+                type.getCooldownTicks());
     }
 
     public final void resetCooldown() {
@@ -62,13 +69,16 @@ public abstract class ConsumableItem {
     }
 
     public final ItemStack buildItem() {
-        ItemStack item = ItemBuilder.create(type.getMaterial())
-                .setDisplayName(type.getDisplayName())
+        ItemBuilder builder = ItemBuilder.create(type.getMaterial())
+                .setDisplayName("§d" + type.getDisplayName())
                 .addFlags(ItemFlag.values())
-                .setLore(this.generateLore())
-                .getResult();
+                .setLore(this.generateLore());
 
+        if (type.isShiny()) builder.addEnchant(Enchantment.DURABILITY, 1);
+
+        ItemStack item = builder.getResult();
         ItemTagEditor editor = ItemTagEditor.forItemMeta(plugin, item);
+
         editor.set("ingame.consumable", PersistentDataType.STRING, type.name());
         editor.apply(item);
 
@@ -99,16 +109,20 @@ public abstract class ConsumableItem {
 
     private String[] generateLore() {
         List<String> description = this.getDescription();
-
         List<String> result = new ArrayList<>();
+
+        long cd = type.getCooldownTicks();
+        if (cd > 0) {
+            result.add("§f冷却：§e" + NumberUtils.format((cd / 20F)) + "s");
+            result.add("");
+        }
+
         if (description != null) {
             description.forEach(line -> result.add("§7" + line));
             result.add("");
         }
 
-        result.add("§f冷却：§e" + (type.getCooldownTicks() / 20F) + "s");
         result.add("§d游戏道具 右键使用");
-
         return result.toArray(String[]::new);
     }
 }

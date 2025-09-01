@@ -1,5 +1,6 @@
 package com.akira.undeadwave.listener;
 
+import com.akira.core.api.tool.MetadataEditor;
 import com.akira.core.api.util.EntityUtils;
 import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
@@ -29,8 +30,9 @@ public class EnemyListener extends ListenerBase {
         Entity entity = e.getEntity();
         if (entity instanceof Player player) {
             if (!this.isIngamePlayer(player)) return;
+            double raw = enemy.getEnemyType().getBaseDamage();
 
-            e.setDamage(enemy.getEnemyType().getBaseDamage());
+            e.setDamage(this.calculateDamage(monster, raw));
             return;
         }
 
@@ -102,5 +104,17 @@ public class EnemyListener extends ListenerBase {
             return monster;
 
         return null;
+    }
+
+    private double calculateDamage(Monster entity, double raw) {
+        MetadataEditor editor = MetadataEditor.create(plugin, entity);
+        String keyName = "ingame.enemy.attack_reduction";
+        if (!editor.has(keyName)) return raw;
+
+        double reduction = editor.get(keyName).asDouble();
+        Validate.isTrue(reduction >= 0 && reduction < 1,
+                "Metadata value from " + keyName + " must be in [0,1).");
+
+        return raw * (1 - reduction);
     }
 }

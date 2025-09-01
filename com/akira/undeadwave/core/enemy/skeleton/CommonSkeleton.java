@@ -3,6 +3,7 @@ package com.akira.undeadwave.core.enemy.skeleton;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.enemy.EnemyEquipmentPreset;
 import com.akira.undeadwave.core.enemy.EnemyType;
+import org.bukkit.Material;
 import org.bukkit.entity.Skeleton;
 
 public class CommonSkeleton extends SkeletonEnemy {
@@ -13,6 +14,6 @@ public class CommonSkeleton extends SkeletonEnemy {
     protected void doEntityPresets(Skeleton entity) {}
 
     protected EnemyEquipmentPreset getEquipmentPreset() {
-        return null;
+        return new EnemyEquipmentPreset(Material.BOW, new Material[]{null, null, null, null});
     }
 }
