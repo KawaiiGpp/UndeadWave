@@ -18,6 +18,7 @@ public class GameSession {
 
     private int kills;
     private int coins;
+    private int score;
 
     private final List<UUID> aliveEnemies;
     private final int maxRound;
@@ -82,6 +83,7 @@ public class GameSession {
     public void increaseCoins(int coins) {
         NumberUtils.ensureNonNegative(coins);
         this.coins += coins;
+        this.score += coins;
     }
 
     public int getKills() {
@@ -90,6 +92,10 @@ public class GameSession {
 
     public int getCoins() {
         return coins;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public List<UUID> getAliveEnemies() {
