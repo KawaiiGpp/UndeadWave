@@ -53,8 +53,8 @@ public abstract class ShopItem extends GuiItem {
             return;
         }
 
-        double heldCoins = session.getCoins();
-        double cost = this.getCost();
+        int heldCoins = session.getCoins();
+        int cost = this.getCost();
 
         if (heldCoins < this.getCost()) {
             PlayerUtils.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 0.5F);
@@ -64,6 +64,7 @@ public abstract class ShopItem extends GuiItem {
 
         String name = CommonUtils.requireNonNull(this.getDisplayName());
         inventory.addItem(CommonUtils.requireNonNull(this.getProduct()));
+        session.decreaseCoins(cost);
 
         PlayerUtils.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 2.0F);
         player.sendMessage("§a你成功购买了 §e" + name + "§a。");
@@ -73,5 +74,5 @@ public abstract class ShopItem extends GuiItem {
 
     protected abstract String getDisplayName();
 
-    protected abstract double getCost();
+    protected abstract int getCost();
 }

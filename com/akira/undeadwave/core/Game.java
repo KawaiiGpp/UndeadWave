@@ -3,6 +3,7 @@ package com.akira.undeadwave.core;
 import com.akira.core.api.util.CommonUtils;
 import com.akira.core.api.util.EntityUtils;
 import com.akira.core.api.util.NumberUtils;
+import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
@@ -36,6 +37,7 @@ public class Game extends GameBase {
         teleport(this.getLocationConfig().getSpawnpoint());
         resetPlayerStat();
         sendStartMessage();
+        startInfoBarLoop();
 
         setupStartingGears();
         startNextRound();
@@ -45,6 +47,7 @@ public class Game extends GameBase {
         validateState(GameState.STARTED);
 
         sendEndMessage(victory);
+        stopInfoBarLoop();
         resetPlayerStat();
         teleport(this.getLocationConfig().getLobby());
 
@@ -142,6 +145,8 @@ public class Game extends GameBase {
 
         player.setExp(0);
         player.setLevel(0);
+
+        PlayerUtils.sendActionBarTitle(player, "");
     }
 
     private void setupStartingGears() {

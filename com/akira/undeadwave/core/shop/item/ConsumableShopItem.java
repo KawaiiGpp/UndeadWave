@@ -23,7 +23,7 @@ public class ConsumableShopItem extends ShopItem {
         return consumableItem.getType().getDisplayName();
     }
 
-    protected double getCost() {
+    protected int getCost() {
         return consumableItem.getType().getCost();
     }
 }

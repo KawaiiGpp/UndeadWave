@@ -86,6 +86,12 @@ public class GameSession {
         this.score += coins;
     }
 
+    public void decreaseCoins(int coins) {
+        NumberUtils.ensurePositive(coins);
+        Validate.isTrue(this.coins >= coins, "No enough coins to descrease.");
+        this.coins -= coins;
+    }
+
     public int getKills() {
         return kills;
     }

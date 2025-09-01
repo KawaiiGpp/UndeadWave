@@ -23,7 +23,7 @@ public class WeaponShopItem extends ShopItem {
         return weapon.getDisplayName();
     }
 
-    protected double getCost() {
+    protected int getCost() {
         return weapon.getWeaponType().getCost();
     }
 }

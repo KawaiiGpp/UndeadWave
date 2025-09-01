@@ -85,12 +85,12 @@ public class EnemyListener extends ListenerBase {
         e.getDrops().clear();
 
         Game game = plugin.getGame();
-        game.handleEnemyKilled(victim.getUniqueId());
-
         GameSession session = game.getSession();
+
         int coinsHeld = enemy.getEnemyType().getCoins();
         session.increaseCoins(coinsHeld);
         session.increaseKills();
+        game.handleEnemyKilled(victim.getUniqueId());
     }
 
     private Enemy<?> parseEnemy(Entity entity) {

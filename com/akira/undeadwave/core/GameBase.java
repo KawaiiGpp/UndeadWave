@@ -45,9 +45,12 @@ import com.akira.undeadwave.core.item.weapon.ranged.shotgun.Shotgun;
 import com.akira.undeadwave.core.item.weapon.ranged.sniper.InfernalSniper;
 import com.akira.undeadwave.core.item.weapon.ranged.sniper.Sniper;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +64,7 @@ public class GameBase {
 
     protected GameSession session;
     protected GameState state;
+    protected BukkitTask infoBarLoop;
 
     protected GameBase(UndeadWave plugin) {
         Validate.notNull(plugin);
@@ -71,6 +75,23 @@ public class GameBase {
         this.weaponManager = new WeaponManager();
         this.enemyManager = new EnemyManager();
         this.consumableItemManager = new ConsumableItemManager();
+    }
+
+    public final void startInfoBarLoop() {
+        Validate.isTrue(infoBarLoop == null, "Info bar loop already existing.");
+        validateState(GameState.STARTED);
+
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        GameInfoBar runnable = new GameInfoBar(session);
+
+        infoBarLoop = scheduler.runTaskTimer(plugin, runnable, 0, 10);
+    }
+
+    public final void stopInfoBarLoop() {
+        Validate.notNull(infoBarLoop, "Info bar loop not found.");
+
+        infoBarLoop.cancel();
+        infoBarLoop = null;
     }
 
     public final List<String> tryEnable() {
