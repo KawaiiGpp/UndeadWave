@@ -292,7 +292,8 @@ public abstract class RangedWeapon extends Weapon {
         entity.setVelocity(entity.getVelocity().clone().setY(0));
 
         float soundPitch = crit ? 1.0F : 2.0F;
-        PlayerUtils.playSound(attacker, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, soundPitch);
+        float soundVolume = crit ? 0.5F : 1.0F;
+        PlayerUtils.playSound(attacker, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, soundVolume, soundPitch);
 
         if (crit) WorldUtils.playParticle(entity.getEyeLocation(), Particle.FLAME, 10, 0.5);
     }
