@@ -1,5 +1,6 @@
 package com.akira.undeadwave.core.shop.item;
 
+import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.item.weapon.base.Weapon;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.ItemStack;
@@ -7,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 public class WeaponShopItem extends ShopItem {
     private final Weapon weapon;
 
-    public WeaponShopItem(ItemStack item, Weapon weapon) {
-        super(item);
+    public WeaponShopItem(UndeadWave plugin, ItemStack item, Weapon weapon) {
+        super(plugin, item);
 
         Validate.notNull(weapon);
         this.weapon = weapon;
@@ -20,5 +21,9 @@ public class WeaponShopItem extends ShopItem {
 
     protected String getDisplayName() {
         return weapon.getDisplayName();
+    }
+
+    protected double getCost() {
+        return weapon.getWeaponType().getCost();
     }
 }

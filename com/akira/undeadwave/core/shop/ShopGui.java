@@ -16,6 +16,7 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 
 public class ShopGui extends Gui {
+    private final UndeadWave plugin;
     private final Game game;
 
     public ShopGui(UndeadWave plugin) {
@@ -24,7 +25,9 @@ public class ShopGui extends Gui {
         Validate.notNull(plugin);
         Validate.notNull(plugin.getGame());
 
+        this.plugin = plugin;
         this.game = plugin.getGame();
+
         this.initialize();
     }
 
@@ -34,7 +37,7 @@ public class ShopGui extends Gui {
         for (WeaponType weaponType : WeaponType.values()) {
             Weapon weapon = game.getWeaponManager().fromWeaponType(weaponType);
 
-            this.setItem(currentSlot, new WeaponShopItem(weapon.buildItem(), weapon));
+            this.setItem(currentSlot, new WeaponShopItem(plugin, weapon.buildItem(), weapon));
             currentSlot++;
         }
 
@@ -42,7 +45,7 @@ public class ShopGui extends Gui {
             ConsumableItem consumableItem = game.getConsumableItemManager().fromType(consumableItemType);
             if (consumableItem instanceof ArmorItem) continue;
 
-            this.setItem(currentSlot, new ConsumableShopItem(consumableItem.buildItem(), consumableItem));
+            this.setItem(currentSlot, new ConsumableShopItem(plugin, consumableItem.buildItem(), consumableItem));
             currentSlot++;
         }
 
@@ -76,6 +79,6 @@ public class ShopGui extends Gui {
         ConsumableItemManager manager = game.getConsumableItemManager();
         ConsumableItem item = manager.fromType(type);
 
-        return new ConsumableShopItem(item.buildItem(), item);
+        return new ConsumableShopItem(plugin, item.buildItem(), item);
     }
 }

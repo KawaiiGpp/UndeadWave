@@ -5,6 +5,7 @@ import com.akira.core.api.util.EntityUtils;
 import com.akira.core.api.util.EventUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.GameSession;
 import com.akira.undeadwave.core.enemy.Enemy;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
@@ -85,6 +86,11 @@ public class EnemyListener extends ListenerBase {
 
         Game game = plugin.getGame();
         game.handleEnemyKilled(victim.getUniqueId());
+
+        GameSession session = game.getSession();
+        int coinsHeld = enemy.getEnemyType().getCoins();
+        session.increaseCoins(coinsHeld);
+        session.increaseKills();
     }
 
     private Enemy<?> parseEnemy(Entity entity) {

@@ -1,6 +1,7 @@
 package com.akira.undeadwave.core;
 
 import com.akira.core.api.config.ConfigFile;
+import com.akira.core.api.util.NumberUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
@@ -17,8 +18,6 @@ public class GameSession {
 
     private int kills;
     private int coins;
-    private double damageTaken;
-    private double damageDealt;
 
     private final List<UUID> aliveEnemies;
     private final int maxRound;
@@ -76,20 +75,21 @@ public class GameSession {
         return owner;
     }
 
+    public void increaseKills() {
+        this.kills++;
+    }
+
+    public void increaseCoins(int coins) {
+        NumberUtils.ensureNonNegative(coins);
+        this.coins += coins;
+    }
+
     public int getKills() {
         return kills;
     }
 
     public int getCoins() {
         return coins;
-    }
-
-    public double getDamageTaken() {
-        return damageTaken;
-    }
-
-    public double getDamageDealt() {
-        return damageDealt;
     }
 
     public List<UUID> getAliveEnemies() {

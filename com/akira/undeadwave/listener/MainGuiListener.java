@@ -26,15 +26,15 @@ public class MainGuiListener extends GuiListener {
     }
 
     protected boolean shouldHandleEvent(InventoryClickEvent e) {
+        return true;
+    }
+
+    protected boolean shouldCallGui(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player player)) return false;
 
         Game game = plugin.getGame();
         if (game.getState() != GameState.STARTED) return false;
 
         return game.getSession().isOwnedBy(player);
-    }
-
-    protected boolean shouldCallGui(InventoryClickEvent e) {
-        return true;
     }
 }
