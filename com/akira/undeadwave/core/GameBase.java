@@ -6,13 +6,21 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.enemy.EnemyManager;
-import com.akira.undeadwave.core.enemy.skeleton.CommonSkeleton;
-import com.akira.undeadwave.core.enemy.skeleton.IronSkeleton;
-import com.akira.undeadwave.core.enemy.skeleton.GoldSkeleton;
-import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
-import com.akira.undeadwave.core.enemy.zombie.DiamondZombie;
-import com.akira.undeadwave.core.enemy.zombie.GoldZombie;
-import com.akira.undeadwave.core.enemy.zombie.IronZombie;
+import com.akira.undeadwave.core.enemy.skeleton.other.ImpactSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.other.SniperSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.regular.CommonSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.regular.IronSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.regular.GoldSkeleton;
+import com.akira.undeadwave.core.enemy.zombie.damage.ShadowAssassinZombie;
+import com.akira.undeadwave.core.enemy.zombie.damage.ThunderblotZombie;
+import com.akira.undeadwave.core.enemy.zombie.regular.CommonZombie;
+import com.akira.undeadwave.core.enemy.zombie.regular.DiamondZombie;
+import com.akira.undeadwave.core.enemy.zombie.regular.GoldZombie;
+import com.akira.undeadwave.core.enemy.zombie.regular.IronZombie;
+import com.akira.undeadwave.core.enemy.zombie.speed.LightningZombie;
+import com.akira.undeadwave.core.enemy.zombie.speed.SpeedsterZombie;
+import com.akira.undeadwave.core.enemy.zombie.tank.RockZombie;
+import com.akira.undeadwave.core.enemy.zombie.tank.TankZombie;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
 import com.akira.undeadwave.core.item.consumable.ability.*;
 import com.akira.undeadwave.core.item.consumable.armor.DiamondArmor;
@@ -172,9 +180,22 @@ public class GameBase {
         enemyManager.register(new IronZombie(plugin));
         enemyManager.register(new DiamondZombie(plugin));
 
+        enemyManager.register(new SpeedsterZombie(plugin));
+        enemyManager.register(new LightningZombie(plugin));
+
+        enemyManager.register(new ThunderblotZombie(plugin));
+        enemyManager.register(new ShadowAssassinZombie(plugin));
+
+        enemyManager.register(new RockZombie(plugin));
+        enemyManager.register(new TankZombie(plugin));
+
+
         enemyManager.register(new CommonSkeleton(plugin));
         enemyManager.register(new GoldSkeleton(plugin));
         enemyManager.register(new IronSkeleton(plugin));
+
+        enemyManager.register(new SniperSkeleton(plugin));
+        enemyManager.register(new ImpactSkeleton(plugin));
     }
 
     public final void initializeConsumableItems() {
