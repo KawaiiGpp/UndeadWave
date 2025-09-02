@@ -13,6 +13,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class EnemyListener extends ListenerBase {
@@ -87,10 +88,23 @@ public class EnemyListener extends ListenerBase {
         Game game = plugin.getGame();
         GameSession session = game.getSession();
 
-        int coinsHeld = enemy.getEnemyType().getCoins();
-        session.increaseCoins(coinsHeld);
-        session.increaseKills();
+        if (this.isKilledByPlayer(victim)) {
+            int coinsHeld = enemy.getEnemyType().getCoins();
+            session.increaseCoins(coinsHeld);
+            session.increaseKills();
+        }
         game.handleEnemyKilled(victim.getUniqueId());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamage(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Monster monster)) return;
+        Enemy<?> enemy = this.parseEnemy(monster);
+        if (enemy == null) return;
+
+        DamageCause cause = e.getCause();
+        if (cause != DamageCause.CRAMMING) return;
+        e.setCancelled(true);
     }
 
     private Enemy<?> parseEnemy(Entity entity) {
@@ -122,5 +136,16 @@ public class EnemyListener extends ListenerBase {
                 "Metadata value from " + keyName + " must be in [0,1).");
 
         return raw * (1 - reduction);
+    }
+
+    private boolean isKilledByPlayer(LivingEntity entity) {
+        Validate.notNull(entity);
+        EntityDamageEvent event = entity.getLastDamageCause();
+
+        if (event == null) return false;
+        if (!(event instanceof EntityDamageByEntityEvent e)) return false;
+        if (!(e.getDamager() instanceof Player player)) return false;
+
+        return this.isIngamePlayer(player);
     }
 }

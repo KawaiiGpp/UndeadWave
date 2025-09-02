@@ -6,9 +6,9 @@ import com.akira.undeadwave.core.enemy.EnemyType;
 import org.bukkit.Material;
 import org.bukkit.entity.Skeleton;
 
-public class CommonSkeleton extends SkeletonEnemy {
-    public CommonSkeleton(UndeadWave plugin) {
-        super(plugin, EnemyType.COMMON_SKELETON);
+public class IronSkeleton extends SkeletonEnemy {
+    public IronSkeleton(UndeadWave plugin) {
+        super(plugin, EnemyType.IRON_SKELETON);
     }
 
     protected void doEntityPresets(Skeleton entity) {}
@@ -18,10 +18,10 @@ public class CommonSkeleton extends SkeletonEnemy {
                 Material.BOW,
 
                 new Material[]{
-                        null,
-                        null,
-                        null,
-                        null
+                        Material.IRON_BOOTS,
+                        Material.IRON_LEGGINGS,
+                        Material.IRON_CHESTPLATE,
+                        Material.IRON_HELMET
                 }
         );
     }

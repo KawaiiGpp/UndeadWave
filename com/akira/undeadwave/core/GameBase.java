@@ -7,7 +7,12 @@ import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import com.akira.undeadwave.core.enemy.EnemyManager;
 import com.akira.undeadwave.core.enemy.skeleton.CommonSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.IronSkeleton;
+import com.akira.undeadwave.core.enemy.skeleton.GoldSkeleton;
 import com.akira.undeadwave.core.enemy.zombie.CommonZombie;
+import com.akira.undeadwave.core.enemy.zombie.DiamondZombie;
+import com.akira.undeadwave.core.enemy.zombie.GoldZombie;
+import com.akira.undeadwave.core.enemy.zombie.IronZombie;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
 import com.akira.undeadwave.core.item.consumable.ability.*;
 import com.akira.undeadwave.core.item.consumable.armor.DiamondArmor;
@@ -163,7 +168,13 @@ public class GameBase {
 
     public final void initializeEnemies() {
         enemyManager.register(new CommonZombie(plugin));
+        enemyManager.register(new GoldZombie(plugin));
+        enemyManager.register(new IronZombie(plugin));
+        enemyManager.register(new DiamondZombie(plugin));
+
         enemyManager.register(new CommonSkeleton(plugin));
+        enemyManager.register(new GoldSkeleton(plugin));
+        enemyManager.register(new IronSkeleton(plugin));
     }
 
     public final void initializeConsumableItems() {

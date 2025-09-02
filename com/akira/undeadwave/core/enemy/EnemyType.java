@@ -4,8 +4,14 @@ import com.akira.core.api.util.NumberUtils;
 import org.apache.commons.lang3.Validate;
 
 public enum EnemyType {
-    COMMON_ZOMBIE(20, 6, 0, 1, 10, 5),
-    COMMON_SKELETON(20, 4, 0, 1, 6, 5);
+    COMMON_ZOMBIE(20, 6, 0, 1, 5, 10, 15),
+    GOLD_ZOMBIE(20, 10, 15, 5, 10, 10, 20),
+    IRON_ZOMBIE(20, 14, 30, 10, 13, 10, 25),
+    DIAMOND_ZOMBIE(20, 18, 45, 13, Integer.MAX_VALUE, 10, 30),
+
+    COMMON_SKELETON(20, 4, 0, 3, 6, 3, 20),
+    GOLD_SKELETON(20, 8, 15, 6, 9, 3, 25),
+    IRON_SKELETON(20, 12, 30, 9, Integer.MAX_VALUE, 3, 30);
 
     private final double maxHealth;
     private final double baseDamage;
@@ -37,12 +43,6 @@ public enum EnemyType {
 
         this.weight = weight;
         this.coins = coins;
-    }
-
-    EnemyType(double maxHealth, double baseDamage, int speedBonus,
-              int availableRoundFrom, int weight, int coins) {
-        this(maxHealth, baseDamage, speedBonus, availableRoundFrom,
-                Integer.MAX_VALUE, weight, coins);
     }
 
     public double getMaxHealth() {

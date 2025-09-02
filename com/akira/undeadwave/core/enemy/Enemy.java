@@ -13,6 +13,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.inventory.EntityEquipment;
@@ -51,9 +52,11 @@ public abstract class Enemy<T extends Monster> {
         entity.setRemoveWhenFarAway(false);
         entity.setMaximumNoDamageTicks(0);
         entity.setPersistent(true);
+        entity.setCanPickupItems(false);
         MetadataEditor.create(plugin, entity).set("ingame.enemy", enemyType.name());
 
         this.setAdultIfAgeable(entity);
+        this.removeIfVehicleExisting(entity);
         this.applyEquipmentPreset(entity);
         this.applyAttribute(entity);
         this.doEntityPresets(entity);
@@ -147,5 +150,15 @@ public abstract class Enemy<T extends Monster> {
 
         if (!(entity instanceof Ageable ageable)) return;
         ageable.setAdult();
+    }
+
+    private void removeIfVehicleExisting(T entity) {
+        Validate.notNull(entity);
+        Entity vehicle = entity.getVehicle();
+
+        if (vehicle == null) return;
+        if (!vehicle.isValid()) return;
+
+        vehicle.remove();
     }
 }

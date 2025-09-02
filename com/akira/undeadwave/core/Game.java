@@ -101,12 +101,15 @@ public class Game extends GameBase {
 
         send("§f第 §2" + round + " §f回合开始了！");
 
+        List<EnemyType> filteredEnemies = new ArrayList<>(Arrays.asList(EnemyType.values()));
+        filteredEnemies.removeIf(e -> round < e.getAvailableRoundFrom() || round > e.getAvailableRoundTo());
+
         int enemyAmount = round * settings.getMonstersPerRound();
-        int weightSum = Arrays.stream(EnemyType.values()).mapToInt(EnemyType::getWeight).sum();
+        int weightSum = filteredEnemies.stream().mapToInt(EnemyType::getWeight).sum();
 
         for (int i = 0; i < enemyAmount; i++) {
             int weightPoint = CommonUtils.getRandom().nextInt(weightSum) + 1;
-            EnemyType type = this.randomEnemyType(weightPoint);
+            EnemyType type = this.randomEnemyType(filteredEnemies, weightPoint);
             Location location = CommonUtils.getRandomElement(locations.getMonsterPoints());
 
             Monster monster = enemyManager.fromType(type).spawn(location);
@@ -115,13 +118,8 @@ public class Game extends GameBase {
         }
     }
 
-    private EnemyType randomEnemyType(int randomPoint) {
+    private EnemyType randomEnemyType(List<EnemyType> filtered, int randomPoint) {
         NumberUtils.ensurePositive(randomPoint);
-        Validate.notNull(session);
-
-        int round = session.getCurrentRound();
-        List<EnemyType> filtered = new ArrayList<>(Arrays.asList(EnemyType.values()));
-        filtered.removeIf(e -> round < e.getAvailableRoundFrom() || round > e.getAvailableRoundTo());
 
         int counter = 0;
         for (EnemyType value : filtered) {
@@ -157,9 +155,8 @@ public class Game extends GameBase {
     }
 
     private void setupStartingGears() {
-        this.giveWeapon(WeaponType.NETHERITE_MINER);
-        this.giveWeapon(WeaponType.LAVA_LAUNCHER);
-        this.giveWeapon(WeaponType.DIAMOND_SHOTGUN);
+        this.giveWeapon(WeaponType.WOOD_KNIFE);
+        this.giveWeapon(WeaponType.PISTOL);
     }
 
     private void giveWeapon(WeaponType type) {
