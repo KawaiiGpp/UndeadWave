@@ -4,7 +4,6 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.item.consumable.ConsumableItem;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemType;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
@@ -15,12 +14,7 @@ public class SpeedSoup extends ConsumableItem {
     }
 
     protected void onConsume(Player player) {
-        PotionEffect speed = new PotionEffect(
-                PotionEffectType.SPEED, 40 * 20, 1,
-                false, false, false);
-
-        player.removePotionEffect(PotionEffectType.SPEED);
-        player.addPotionEffect(speed);
+        addPotionEffect(player, PotionEffectType.SPEED, 40, 2);
     }
 
     protected List<String> getDescription() {

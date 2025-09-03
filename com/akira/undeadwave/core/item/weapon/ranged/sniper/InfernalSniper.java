@@ -19,7 +19,7 @@ public class InfernalSniper extends RangedWeapon {
                 41, 100, 55, 30,
                 (w, l) -> WorldUtils.playParticle(l, Particle.SOUL_FIRE_FLAME),
                 new Tuple<>(Sound.BLOCK_GRAVEL_STEP, 2.0F),
-                80, 2, 1, 130, 1,
+                80, 2, 1, 260, 1,
                 true, false);
     }
 }

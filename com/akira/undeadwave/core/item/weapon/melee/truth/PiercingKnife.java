@@ -12,6 +12,6 @@ public class PiercingKnife extends MeleeWeapon {
                 Material.WOODEN_SWORD,
                 "穿透之刃",
                 new String[]{"以一股神秘的力量，", "击碎盔甲的防御。"},
-                8, 60, 30, true, false, 1.0F, 0, 0, 0);
+                8, 60, 40, true, false, 1.0F, 0, 0, 0);
     }
 }

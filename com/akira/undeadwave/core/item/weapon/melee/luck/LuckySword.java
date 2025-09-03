@@ -12,6 +12,6 @@ public class LuckySword extends MeleeWeapon {
                 Material.STONE_SWORD,
                 "幸运之剑",
                 new String[]{"每一刀都在赌，", "偶尔能打出惊人的伤害。"},
-                8, 400, 20, false, false, 1.3F, 0, 0, 0);
+                8, 400, 30, false, false, 1.3F, 0, 0, 0);
     }
 }

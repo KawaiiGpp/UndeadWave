@@ -19,7 +19,7 @@ public class Sniper extends RangedWeapon {
                 21, 70, 35, 40,
                 (w, l) -> WorldUtils.playParticle(l, Particle.SMOKE_NORMAL),
                 new Tuple<>(Sound.BLOCK_GRAVEL_STEP, 2.0F),
-                60, 2, 1, 70, 1,
+                60, 2, 1, 140, 1,
                 true, false);
     }
 }

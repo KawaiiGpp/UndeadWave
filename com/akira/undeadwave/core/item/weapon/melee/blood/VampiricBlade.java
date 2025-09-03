@@ -12,6 +12,6 @@ public class VampiricBlade extends MeleeWeapon {
                 Material.IRON_SWORD,
                 "吸血鬼之刃",
                 new String[]{"传说中吸血鬼的武器，", "可将鲜血化作无尽的力量。"},
-                16, 80, 50, false, false, 1.4F, 0, 20, 30);
+                16, 80, 70, false, false, 1.4F, 0, 20, 30);
     }
 }

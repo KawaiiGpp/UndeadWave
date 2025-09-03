@@ -12,6 +12,6 @@ public class StormBlade extends MeleeWeapon {
                 Material.IRON_SWORD,
                 "风暴之剑",
                 new String[]{"如同风暴席卷万物而去，", "为下一轮战斗争取时间。"},
-                18, 110, 60, false, true, 5F, 0, 10, 8);
+                18, 110, 75, false, true, 5F, 0, 10, 8);
     }
 }

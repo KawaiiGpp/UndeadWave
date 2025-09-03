@@ -15,10 +15,10 @@ public class RocketLauncher extends RangedWeapon {
                 Material.STONE_SHOVEL,
                 "火箭筒",
                 new String[]{"硕大的肌肉，", "激情的发射。"},
-                28, 80, 40, 70,
+                28, 80, 50, 70,
                 Particle.EXPLOSION_HUGE,
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 1.0F),
-                12, 10, 2, 60, 1.0,
+                12, 10, 2, 120, 1.0,
                 true, false);
     }
 }

@@ -19,7 +19,7 @@ public class FateGun extends RangedWeapon {
                 11, 580, 35, 5,
                 (w, l) -> WorldUtils.playParticle(l, Particle.GLOW),
                 new Tuple<>(Sound.BLOCK_BAMBOO_HIT, 2.0F),
-                35, 1, 1, 180, 1.0,
+                35, 1, 1, 360, 1.0,
                 false, false);
     }
 }

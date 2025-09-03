@@ -15,10 +15,10 @@ public class FireLauncher extends RangedWeapon {
                 Material.STONE_SHOVEL,
                 "火焰发射器",
                 new String[]{"喷出熊熊火焰，", "制造范围性伤害。"},
-                14, 70, 35, 15,
+                14, 70, 45, 15,
                 Particle.LAVA,
                 new Tuple<>(Sound.ITEM_FIRECHARGE_USE, 1.0F),
-                8, 8, 0.5, 120, 1.0,
+                8, 8, 0.5, 240, 1.0,
                 true, false);
     }
 }

@@ -15,10 +15,10 @@ public class AncientRocketLauncher extends RangedWeapon {
                 Material.DIAMOND_SHOVEL,
                 "远古火箭筒",
                 new String[]{"让人魂飞魄散的强者，", "在古战场上所向披靡。"},
-                35, 130, 50, 50,
+                35, 130, 70, 50,
                 Particle.EXPLOSION_HUGE,
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 1.0F),
-                20, 16, 2, 110, 1.0,
+                20, 16, 2, 200, 1.0,
                 true, false);
     }
 }

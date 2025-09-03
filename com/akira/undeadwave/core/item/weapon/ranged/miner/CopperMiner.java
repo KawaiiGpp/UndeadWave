@@ -21,7 +21,7 @@ public class CopperMiner extends RangedWeapon {
                 9, 100, 25, 7,
                 (w, l) -> WorldUtils.playParticle(l, Particle.REDSTONE, 1, 0, new DustOptions(Color.fromRGB(100, 40, 40), 1)),
                 new Tuple<>(Sound.BLOCK_METAL_PLACE, 1F),
-                20, 1, 1, 120, 1.0,
+                20, 1, 1, 240, 1.0,
                 false, false);
     }
 }

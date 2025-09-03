@@ -19,7 +19,7 @@ public class GamblerGun extends RangedWeapon {
                 8, 430, 20, 7,
                 (w, l) -> WorldUtils.playParticle(l, Particle.CRIT_MAGIC),
                 new Tuple<>(Sound.BLOCK_BAMBOO_HIT, 1.0F),
-                25, 1, 1, 135, 1.0,
+                25, 1, 1, 270, 1.0,
                 false, false);
     }
 }

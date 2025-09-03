@@ -12,6 +12,6 @@ public class DiamondKnife extends MeleeWeapon {
                 Material.DIAMOND_SWORD,
                 "钻石匕首",
                 new String[]{"使用坚硬的钻石制成，", "虽然昂贵，但相信它值得。"},
-                18, 100, 50, false, true, 1.75F, 0, 0, 0);
+                18, 100, 75, false, true, 1.75F, 0, 0, 0);
     }
 }
