@@ -1,6 +1,5 @@
 package com.akira.undeadwave.core.item.consumable.ability;
 
-import com.akira.core.api.util.CommonUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.item.consumable.ConsumableItem;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemType;
@@ -16,9 +15,8 @@ public class HealingApple extends ConsumableItem {
     }
 
     protected void onConsume(Player player) {
-        int addition = CommonUtils.getRandom().nextInt(6);
         PotionEffect effect = new PotionEffect(
-                PotionEffectType.REGENERATION, (5 + addition) * 20, 1,
+                PotionEffectType.REGENERATION, 5 * 20, 1,
                 false, false, false);
 
         player.removePotionEffect(PotionEffectType.REGENERATION);
@@ -26,6 +24,6 @@ public class HealingApple extends ConsumableItem {
     }
 
     protected List<String> getDescription() {
-        return List.of("加速生命恢复，", "持续5到10秒。");
+        return List.of("加速生命恢复，", "持续5秒时间。");
     }
 }
