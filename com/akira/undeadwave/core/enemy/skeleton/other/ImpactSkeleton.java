@@ -35,7 +35,7 @@ public class ImpactSkeleton extends DyedSkeletonEnemy {
 
     protected ItemStack getWeaponItem() {
         return ItemBuilder.create(Material.BOW)
-                .addEnchant(Enchantment.ARROW_KNOCKBACK, 4)
+                .addEnchant(Enchantment.ARROW_KNOCKBACK, 2)
                 .getResult();
     }
 }

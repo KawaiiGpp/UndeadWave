@@ -58,9 +58,7 @@ import com.akira.undeadwave.core.item.weapon.ranged.shotgun.Shotgun;
 import com.akira.undeadwave.core.item.weapon.ranged.sniper.InfernalSniper;
 import com.akira.undeadwave.core.item.weapon.ranged.sniper.Sniper;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -111,14 +109,22 @@ public class GameBase {
         LocationConfig config = this.getLocationConfig();
         List<String> tips = new ArrayList<>();
 
+        Location lobby = config.getLobby();
+        Location spawnpoint = config.getSpawnpoint();
+
         if (config.getMonsterPoints().isEmpty())
             tips.add("至少需要设置一个怪物刷新点。");
-        if (config.getLobby() == null)
+        if (lobby == null)
             tips.add("需要设置大厅位置。");
-        if (config.getSpawnpoint() == null)
+        if (spawnpoint == null)
             tips.add("需要设置出生点位置。");
+        if (compareWorld(lobby, spawnpoint))
+            tips.add("出生点与大厅不可设在同一个世界。");
 
-        if (tips.isEmpty()) state = GameState.WAITING;
+        if (!tips.isEmpty()) return tips;
+
+        this.doWorldPresets();
+        state = GameState.WAITING;
         return tips;
     }
 
@@ -283,5 +289,39 @@ public class GameBase {
 
     protected final void playSound(Sound sound) {
         playSound(sound, 1.0F);
+    }
+
+    private void doWorldPresets() {
+        LocationConfig config = this.getLocationConfig();
+
+        this.doWorldPresets(config.getSpawnpoint().getWorld());
+        this.doWorldPresets(config.getLobby().getWorld());
+    }
+
+    private void doWorldPresets(World world) {
+        Validate.notNull(world);
+
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+
+        world.setStorm(false);
+        world.setThundering(false);
+        world.setTime(18000);
+    }
+
+    private boolean compareWorld(Location a, Location b) {
+        if (a == null)
+            return false;
+        if (b == null)
+            return false;
+
+        World x = a.getWorld();
+        World y = b.getWorld();
+
+        Validate.notNull(x);
+        Validate.notNull(y);
+
+        return x.equals(y);
     }
 }

@@ -2,6 +2,7 @@ package com.akira.undeadwave.core.shop.item;
 
 import com.akira.core.api.gui.GuiItem;
 import com.akira.core.api.util.CommonUtils;
+import com.akira.core.api.util.NumberUtils;
 import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.GameSession;
@@ -35,7 +36,7 @@ public abstract class ShopItem extends GuiItem {
                 new ArrayList<>() : meta.getLore();
 
         lore.add("");
-        lore.add("§f价格：§6" + this.getCost());
+        lore.add("§f价格：§6" + NumberUtils.format(this.getCost()));
 
         meta.setLore(lore);
         item.setItemMeta(meta);

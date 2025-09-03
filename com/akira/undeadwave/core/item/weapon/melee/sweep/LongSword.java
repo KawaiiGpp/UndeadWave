@@ -12,6 +12,6 @@ public class LongSword extends MeleeWeapon {
                 Material.STONE_SWORD,
                 "长剑",
                 new String[]{"这把剑格外地长，", "也许具备横扫千军潜力。"},
-                6, 50, 25, false, true, 1.15F, 30, 0, 0);
+                10, 90, 30, false, true, 1.15F, 30, 0, 0);
     }
 }

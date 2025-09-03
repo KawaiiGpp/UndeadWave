@@ -12,6 +12,6 @@ public class TrueKnife extends MeleeWeapon {
                 Material.STONE_SWORD,
                 "真·匕首",
                 new String[]{"以未知物质锻造而成，", "轻松击破厚实的盔甲。"},
-                7, 60, 30, true, true, 1.2F, 0, 0, 0);
+                12, 70, 40, true, true, 1.2F, 50, 0, 0);
     }
 }

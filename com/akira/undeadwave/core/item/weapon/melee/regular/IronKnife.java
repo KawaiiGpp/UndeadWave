@@ -12,6 +12,6 @@ public class IronKnife extends MeleeWeapon {
                 Material.IRON_SWORD,
                 "铁制匕首",
                 new String[]{"精心锻造而成的好剑，", "材料升级后战力更强了。"},
-                7, 75, 40, false, false, 1.25F, 0, 0, 0);
+                10, 80, 40, false, false, 1.25F, 0, 0, 0);
     }
 }

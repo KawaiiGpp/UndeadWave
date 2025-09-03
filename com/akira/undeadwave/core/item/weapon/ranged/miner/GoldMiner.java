@@ -17,10 +17,10 @@ public class GoldMiner extends RangedWeapon {
                 Material.GOLDEN_PICKAXE,
                 "黄金矿工",
                 new String[]{"黄金的信仰，", "黄金的输出。"},
-                10, 70, 30, 7,
+                16, 140, 35, 5,
                 (w, l) -> WorldUtils.playParticle(l, Particle.REDSTONE, 1, 0, new Particle.DustOptions(Color.YELLOW, 2)),
                 new Tuple<>(Sound.BLOCK_METAL_PLACE, 1F),
-                40, 1, 1, 150, 1.0,
+                30, 1, 1, 180, 1.0,
                 false, false);
     }
 }

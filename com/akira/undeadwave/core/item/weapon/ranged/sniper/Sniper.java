@@ -16,7 +16,7 @@ public class Sniper extends RangedWeapon {
                 Material.WOODEN_SHOVEL,
                 "狙击枪",
                 new String[]{"远程精准打击，", "露头就秒。"},
-                14, 70, 50, 40,
+                21, 70, 35, 40,
                 (w, l) -> WorldUtils.playParticle(l, Particle.SMOKE_NORMAL),
                 new Tuple<>(Sound.BLOCK_GRAVEL_STEP, 2.0F),
                 60, 2, 1, 70, 1,

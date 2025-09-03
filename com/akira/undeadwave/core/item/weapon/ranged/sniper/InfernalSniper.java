@@ -16,10 +16,10 @@ public class InfernalSniper extends RangedWeapon {
                 Material.NETHERITE_SHOVEL,
                 "炼狱狙击枪",
                 new String[]{"藏于暗处打击敌人，", "接受来自地狱的力量。"},
-                22, 90, 60, 30,
+                41, 100, 55, 30,
                 (w, l) -> WorldUtils.playParticle(l, Particle.SOUL_FIRE_FLAME),
                 new Tuple<>(Sound.BLOCK_GRAVEL_STEP, 2.0F),
-                80, 2, 1, 140, 1,
+                80, 2, 1, 130, 1,
                 true, false);
     }
 }

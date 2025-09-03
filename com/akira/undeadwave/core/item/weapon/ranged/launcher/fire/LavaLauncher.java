@@ -16,10 +16,10 @@ public class LavaLauncher extends RangedWeapon {
                 Material.GOLDEN_SHOVEL,
                 "岩浆发射器",
                 new String[]{"喷出炙热的岩浆，", "对敌人造成致命打击。"},
-                10, 65, 35, 20,
+                16, 120, 45, 15,
                 (w, l) -> WorldUtils.playParticle(l, Particle.LAVA, 2),
                 new Tuple<>(Sound.ITEM_FIRECHARGE_USE, 1.0F),
-                15, 12, 0.5, 140, 1.0,
+                12, 16, 0.5, 150, 1.0,
                 true, false);
     }
 }

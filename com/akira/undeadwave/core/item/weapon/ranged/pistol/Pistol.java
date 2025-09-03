@@ -14,9 +14,9 @@ public class Pistol extends RangedWeapon {
                 Material.WOODEN_HOE,
                 "手枪",
                 new String[]{"这是你的第一把枪，", "与你并肩作战的队友。"},
-                4, 40, 20, 10,
+                6, 60, 30, 10,
                 (w, l) -> WorldUtils.playParticle(l, Particle.CRIT), null,
-                30, 1, 1, 80, 1.0,
+                20, 1, 1, 80, 1.0,
                 false, false);
     }
 }

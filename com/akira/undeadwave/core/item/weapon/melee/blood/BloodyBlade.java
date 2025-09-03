@@ -12,6 +12,6 @@ public class BloodyBlade extends MeleeWeapon {
                 Material.STONE_SWORD,
                 "鲜血之刃",
                 new String[]{"刀刃沾着鲜红的血液，", "似乎对鲜血有强烈的反应。"},
-                7, 60, 30, false, false, 1.2F, 0, 30, 15);
+                10, 60, 30, false, false, 1.2F, 0, 20, 20);
     }
 }

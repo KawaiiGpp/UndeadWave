@@ -16,10 +16,10 @@ public class FateGun extends RangedWeapon {
                 Material.IRON_PICKAXE,
                 "命运之枪",
                 new String[]{"相信命运的指引，", "把一切交给命运。"},
-                9, 350, 20, 7,
+                11, 580, 35, 5,
                 (w, l) -> WorldUtils.playParticle(l, Particle.GLOW),
                 new Tuple<>(Sound.BLOCK_BAMBOO_HIT, 2.0F),
-                40, 1, 1, 160, 1.0,
+                35, 1, 1, 180, 1.0,
                 false, false);
     }
 }

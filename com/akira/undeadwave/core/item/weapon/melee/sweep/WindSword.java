@@ -12,6 +12,6 @@ public class WindSword extends MeleeWeapon {
                 Material.IRON_SWORD,
                 "风之剑",
                 new String[]{"一把风神眷顾的剑，", "横扫战力十分可观。"},
-                8, 75, 35, false, true, 1.45F, 60, 0, 0);
+                17, 110, 40, false, true, 1.45F, 105, 0, 0);
     }
 }

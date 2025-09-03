@@ -5,26 +5,26 @@ import org.apache.commons.lang3.Validate;
 
 public enum EnemyType {
     COMMON_ZOMBIE(20, 6, 0, 1, 5, 100, 15),
-    GOLD_ZOMBIE(20, 10, 15, 5, 10, 100, 20),
-    IRON_ZOMBIE(20, 14, 30, 10, 13, 100, 25),
-    DIAMOND_ZOMBIE(20, 18, 45, 13, Integer.MAX_VALUE, 100, 30),
+    GOLD_ZOMBIE(20, 10, 15, 5, 8, 100, 20),
+    IRON_ZOMBIE(20, 14, 30, 8, 12, 100, 25),
+    DIAMOND_ZOMBIE(20, 18, 45, 12, Integer.MAX_VALUE, 100, 30),
 
-    SPEEDSTER_ZOMBIE(40, 8, 60, 5, 8, 15, 40),
-    LIGHTNING_ZOMBIE(40, 12, 100, 10, Integer.MAX_VALUE, 15, 60),
+    SPEEDSTER_ZOMBIE(40, 8, 60, 6, 8, 15, 40),
+    LIGHTNING_ZOMBIE(40, 12, 100, 11, Integer.MAX_VALUE, 15, 50),
 
     THUNDERBLOT_ZOMBIE(50, 18, 20, 7, 10, 30, 75),
-    SHADOW_ASSASSIN_ZOMBIE(70, 24, 40, 12, Integer.MAX_VALUE, 20, 95),
+    SHADOW_ASSASSIN_ZOMBIE(70, 24, 40, 13, Integer.MAX_VALUE, 20, 85),
 
-    ROCK_ZOMBIE(30, 5, 0, 3, 6, 25, 30),
-    TANK_ZOMBIE(40, 10, 0, 10, Integer.MAX_VALUE, 25, 40),
+    ROCK_ZOMBIE(30, 5, 0, 3, 6, 25, 25),
+    TANK_ZOMBIE(40, 10, 0, 10, Integer.MAX_VALUE, 25, 35),
 
 
-    COMMON_SKELETON(20, 4, 0, 3, 6, 30, 20),
-    GOLD_SKELETON(20, 8, 15, 6, 9, 30, 25),
-    IRON_SKELETON(20, 12, 30, 9, Integer.MAX_VALUE, 30, 30),
+    COMMON_SKELETON(20, 4, 0, 4, 7, 30, 20),
+    GOLD_SKELETON(20, 8, 15, 7, 10, 30, 25),
+    IRON_SKELETON(20, 12, 30, 10, Integer.MAX_VALUE, 30, 30),
 
-    IMPACT_SKELETON(40, 8, 20, 7, Integer.MAX_VALUE, 20, 50),
-    SNIPER_SKELETON(40, 18, 20, 10, Integer.MAX_VALUE, 10, 50);
+    IMPACT_SKELETON(40, 8, 20, 7, Integer.MAX_VALUE, 10, 40),
+    SNIPER_SKELETON(40, 18, 20, 11, Integer.MAX_VALUE, 10, 60);
 
     private final double maxHealth;
     private final double baseDamage;

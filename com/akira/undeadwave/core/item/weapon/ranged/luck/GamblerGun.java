@@ -16,10 +16,10 @@ public class GamblerGun extends RangedWeapon {
                 Material.WOODEN_PICKAXE,
                 "赌徒之枪",
                 new String[]{"相信自己的运气，", "体验一把赌狗的快乐。"},
-                6, 275, 10, 10,
+                8, 430, 20, 7,
                 (w, l) -> WorldUtils.playParticle(l, Particle.CRIT_MAGIC),
                 new Tuple<>(Sound.BLOCK_BAMBOO_HIT, 1.0F),
-                30, 1, 1, 120, 1.0,
+                25, 1, 1, 135, 1.0,
                 false, false);
     }
 }

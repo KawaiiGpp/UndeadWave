@@ -16,11 +16,11 @@ public class NetheriteMiner extends RangedWeapon {
         super(plugin, WeaponType.NETHERITE_MINER, WeaponAttackType.RANGED,
                 Material.NETHERITE_PICKAXE,
                 "合金矿工",
-                new String[]{"来源于下界合金的力量，", "满足你对攻速的一切想象。"},
-                12, 90, 40, 4,
+                new String[]{"源自下界合金的力量，", "满足你对攻速的一切想象。"},
+                23, 180, 45, 3,
                 (w, l) -> WorldUtils.playParticle(l, Particle.REDSTONE, 1, 0, new Particle.DustOptions(Color.GRAY, 3)),
                 new Tuple<>(Sound.BLOCK_METAL_PLACE, 1F),
-                50, 1, 1, 220, 1.0,
+                40, 1, 1, 250, 1.0,
                 false, false);
     }
 }

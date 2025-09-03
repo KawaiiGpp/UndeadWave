@@ -14,11 +14,11 @@ public class RocketLauncher extends RangedWeapon {
         super(plugin, WeaponType.ROCKET_LAUNCHER, WeaponAttackType.RANGED,
                 Material.STONE_SHOVEL,
                 "火箭筒",
-                new String[]{"硕大的肌肉，", "激情的战斗。"},
-                9, 60, 30, 70,
+                new String[]{"硕大的肌肉，", "激情的发射。"},
+                28, 80, 40, 70,
                 Particle.EXPLOSION_HUGE,
                 new Tuple<>(Sound.ENTITY_GENERIC_EXPLODE, 1.0F),
-                15, 6, 2, 90, 1.0,
+                12, 10, 2, 60, 1.0,
                 true, false);
     }
 }

@@ -12,6 +12,6 @@ public class ShockBlade extends MeleeWeapon {
                 Material.WOODEN_SWORD,
                 "击退剑",
                 new String[]{"短暂击退敌人，", "为自己争取时间。"},
-                5, 50, 20, false, true, 2F, 0, 0, 0);
+                10, 80, 30, false, true, 3F, 0, 0, 0);
     }
 }

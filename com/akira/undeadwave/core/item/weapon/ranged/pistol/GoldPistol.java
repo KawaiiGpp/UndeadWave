@@ -16,10 +16,10 @@ public class GoldPistol extends RangedWeapon {
                 Material.GOLDEN_HOE,
                 "黄金手枪",
                 new String[]{"高纯度黄金的加持下，", "战力得到显著提升。"},
-                6, 70, 30, 8,
+                12, 70, 40, 8,
                 (w, l) -> WorldUtils.playParticle(l, Particle.BLOCK_DUST, 1, 0, Material.GOLD_BLOCK.createBlockData()),
                 new Tuple<>(Sound.BLOCK_STONE_PLACE, 1F),
-                40, 1, 1, 100, 1.0,
+                30, 1, 1, 120, 1.0,
                 false, false);
     }
 }
