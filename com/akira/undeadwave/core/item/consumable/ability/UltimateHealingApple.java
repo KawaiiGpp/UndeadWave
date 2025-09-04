@@ -16,7 +16,7 @@ public class UltimateHealingApple extends ConsumableItem {
     protected void onConsume(Player player) {
         addPotionEffect(player, PotionEffectType.REGENERATION, 10, 3);
         healInstantly(player, 6);
-        player.setAbsorptionAmount(12);
+        addAbsorption(player, 10);
     }
 
     protected List<String> getDescription() {

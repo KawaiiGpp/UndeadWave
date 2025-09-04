@@ -57,7 +57,7 @@ public class ShopGui extends Gui {
         while (currentSlot < size) {
             ConsumableItemType type = null;
 
-            if (currentSlot == 47) type = ConsumableItemType.LEATHER_ARMOR;
+            if (currentSlot == 47) type = ConsumableItemType.GOLD_ARMOR;
             else if (currentSlot == 49) type = ConsumableItemType.IRON_ARMOR;
             else if (currentSlot == 51) type = ConsumableItemType.DIAMOND_ARMOR;
 

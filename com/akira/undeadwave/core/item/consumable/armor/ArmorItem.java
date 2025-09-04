@@ -38,8 +38,6 @@ public abstract class ArmorItem extends ConsumableItem {
 
     protected abstract Material getBoots();
 
-    protected abstract void onItemArmorAppend(ItemStack armorItem);
-
     private ItemStack[] getArmorSet() {
         ItemStack helmet = createItem("头盔", this.getHelmet());
         ItemStack chestplate = createItem("胸甲", this.getChestplate());
@@ -53,14 +51,11 @@ public abstract class ArmorItem extends ConsumableItem {
         Validate.notNull(name);
 
         if (material != null) {
-            ItemStack item = ItemBuilder.create(material)
+            return ItemBuilder.create(material)
                     .addFlags(ItemFlag.values())
                     .setDisplayName("§d" + namePrefix + name)
                     .setUnbreakable(true)
                     .getResult();
-
-            this.onItemArmorAppend(item);
-            return item;
         }
         else return null;
     }

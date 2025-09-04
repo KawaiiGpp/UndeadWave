@@ -12,6 +12,6 @@ public class FateSword extends MeleeWeapon {
                 Material.IRON_SWORD,
                 "命运之剑",
                 new String[]{"紧握这把剑，闭上眼睛，", "将一切交给命运来决定。"},
-                10, 550, 40, false, true, 1.6F, 0, 0, 0);
+                10, 900, 40, false, true, 1.6F, 0, 0, 0);
     }
 }

@@ -3,7 +3,6 @@ package com.akira.undeadwave.core.item.consumable.armor;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemType;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class IronArmor extends ArmorItem {
     public IronArmor(UndeadWave plugin) {
@@ -25,6 +24,4 @@ public class IronArmor extends ArmorItem {
     protected Material getBoots() {
         return Material.IRON_BOOTS;
     }
-
-    protected void onItemArmorAppend(ItemStack armorItem) {}
 }

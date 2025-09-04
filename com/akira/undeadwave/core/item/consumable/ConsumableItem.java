@@ -139,6 +139,14 @@ public abstract class ConsumableItem {
         player.setHealth(Math.min(maxHealth, newHealth));
     }
 
+    protected final void addAbsorption(Player player, double amount) {
+        Validate.notNull(player);
+        NumberUtils.ensurePositive(amount);
+
+        double existing = player.getAbsorptionAmount();
+        player.setAbsorptionAmount(Math.min(20, existing + amount));
+    }
+
     protected abstract void onConsume(Player player);
 
     protected abstract List<String> getDescription();

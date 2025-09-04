@@ -4,24 +4,24 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.core.item.consumable.ConsumableItemType;
 import org.bukkit.Material;
 
-public class DiamondArmor extends ArmorItem {
-    public DiamondArmor(UndeadWave plugin) {
-        super(plugin, ConsumableItemType.DIAMOND_ARMOR, "钻石");
+public class GoldArmor extends ArmorItem{
+    public GoldArmor(UndeadWave plugin) {
+        super(plugin, ConsumableItemType.GOLD_ARMOR, "金");
     }
 
     protected Material getHelmet() {
-        return Material.DIAMOND_HELMET;
+        return Material.GOLDEN_HELMET;
     }
 
     protected Material getChestplate() {
-        return Material.DIAMOND_CHESTPLATE;
+        return Material.GOLDEN_CHESTPLATE;
     }
 
     protected Material getLeggings() {
-        return Material.DIAMOND_LEGGINGS;
+        return Material.GOLDEN_LEGGINGS;
     }
 
     protected Material getBoots() {
-        return Material.DIAMOND_BOOTS;
+        return Material.GOLDEN_BOOTS;
     }
 }

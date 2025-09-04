@@ -12,6 +12,6 @@ public class WoodKnife extends MeleeWeapon {
                 Material.WOODEN_SWORD,
                 "木制匕首",
                 new String[]{"这是你的第一把剑，", "能帮助你驱魔降妖。"},
-                6, 60, 45, false, false, 1.0F, 0, 0, 0);
+                6, 90, 45, false, false, 1.0F, 0, 0, 0);
     }
 }

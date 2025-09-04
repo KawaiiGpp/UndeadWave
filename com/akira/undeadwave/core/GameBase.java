@@ -25,7 +25,7 @@ import com.akira.undeadwave.core.item.consumable.ConsumableItemManager;
 import com.akira.undeadwave.core.item.consumable.ability.*;
 import com.akira.undeadwave.core.item.consumable.armor.DiamondArmor;
 import com.akira.undeadwave.core.item.consumable.armor.IronArmor;
-import com.akira.undeadwave.core.item.consumable.armor.LeatherArmor;
+import com.akira.undeadwave.core.item.consumable.armor.GoldArmor;
 import com.akira.undeadwave.core.item.weapon.WeaponManager;
 import com.akira.undeadwave.core.item.weapon.melee.blood.BloodyBlade;
 import com.akira.undeadwave.core.item.weapon.melee.blood.VampiricBlade;
@@ -213,7 +213,7 @@ public class GameBase {
         consumableItemManager.register(new FrozenFeather(plugin));
         consumableItemManager.register(new FrozenMushroom(plugin));
 
-        consumableItemManager.register(new LeatherArmor(plugin));
+        consumableItemManager.register(new GoldArmor(plugin));
         consumableItemManager.register(new IronArmor(plugin));
         consumableItemManager.register(new DiamondArmor(plugin));
     }

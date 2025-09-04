@@ -4,10 +4,10 @@ import com.akira.core.api.util.NumberUtils;
 import org.apache.commons.lang3.Validate;
 
 public enum EnemyType {
-    COMMON_ZOMBIE(20, 6, 0, 1, 5, 100, 25),
-    GOLD_ZOMBIE(20, 10, 10, 5, 8, 100, 40),
+    COMMON_ZOMBIE(20, 6, 0, 1, 5, 100, 35),
+    GOLD_ZOMBIE(20, 10, 10, 5, 8, 100, 45),
     IRON_ZOMBIE(20, 14, 20, 8, 12, 100, 55),
-    DIAMOND_ZOMBIE(20, 18, 30, 12, Integer.MAX_VALUE, 100, 70),
+    DIAMOND_ZOMBIE(20, 18, 30, 12, Integer.MAX_VALUE, 100, 65),
 
     SPEEDSTER_ZOMBIE(40, 8, 60, 6, 8, 15, 90),
     LIGHTNING_ZOMBIE(40, 12, 100, 11, Integer.MAX_VALUE, 15, 100),
@@ -19,12 +19,12 @@ public enum EnemyType {
     TANK_ZOMBIE(40, 10, 0, 10, Integer.MAX_VALUE, 20, 70),
 
 
-    COMMON_SKELETON(20, 4, 0, 4, 7, 30, 40),
-    GOLD_SKELETON(20, 8, 15, 7, 10, 30, 55),
-    IRON_SKELETON(20, 12, 30, 10, Integer.MAX_VALUE, 30, 70),
+    COMMON_SKELETON(20, 4, 0, 4, 7, 30, 50),
+    GOLD_SKELETON(20, 8, 15, 7, 10, 30, 65),
+    IRON_SKELETON(20, 12, 30, 10, Integer.MAX_VALUE, 30, 80),
 
-    IMPACT_SKELETON(40, 8, 20, 7, Integer.MAX_VALUE, 5, 90),
-    SNIPER_SKELETON(40, 18, 20, 11, Integer.MAX_VALUE, 5, 100);
+    IMPACT_SKELETON(40, 8, 20, 7, Integer.MAX_VALUE, 5, 100),
+    SNIPER_SKELETON(40, 18, 20, 11, Integer.MAX_VALUE, 5, 120);
 
     private final double maxHealth;
     private final double baseDamage;
