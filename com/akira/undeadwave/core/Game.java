@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,19 +41,26 @@ public class Game extends GameBase {
         setupStartingGears();
         startInfoBarLoop();
 
+        session.markStartTime();
         startNextRound();
     }
 
     public void endGame(boolean victory) {
         validateState(GameState.STARTED);
 
-        stopInfoBarLoop();
-        resetPlayerStats();
-        teleport(this.getLocationConfig().getLobby());
-        sendGameEndMessage(victory);
+        try {
+            stopInfoBarLoop();
+            resetPlayerStats();
+            teleport(this.getLocationConfig().getLobby());
+            sendGameEndMessage(victory);
 
-        weaponManager.resetRangedWeaponCooldown();
-        consumableItemManager.resetCooldown();
+            weaponManager.resetRangedWeaponCooldown();
+            consumableItemManager.resetCooldown();
+        } catch (Exception e) {
+            plugin.logErr("在游戏结束时发生了异常。");
+            e.printStackTrace();
+        }
+
         if (!victory) this.removeExistingEnemies();
 
         this.session = null;
@@ -165,9 +173,9 @@ public class Game extends GameBase {
 
         send("§b游戏已经开始，祝你好运。");
         send("§8" + line);
-        send("§7§o击杀所有对你虎视眈眈的怪物，并活下去。你会成功的。");
-        send("§7§o命令方块藏着珍贵的武器和道具，相信会对你帮助。");
-        send("§7§o探测器已配备，与最近僵尸的距离将显示在经验条的上方。");
+        send("§7击杀所有对你虎视眈眈的怪物，并活下去。你会成功的。");
+        send("§7命令方块藏着珍贵的武器和道具，相信会对你帮助。");
+        send("§7探测器已配备，与最近僵尸的距离将显示在经验条的上方。");
         send("§8" + line);
 
         playSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F);
@@ -187,6 +195,8 @@ public class Game extends GameBase {
 
             playSound(Sound.BLOCK_ANVIL_LAND);
         }
+
+        sendSummary();
     }
 
     private void sendRoundMessage() {
@@ -204,5 +214,19 @@ public class Game extends GameBase {
 
         if (round == 1) return;
         playSound(Sound.ENTITY_PLAYER_LEVELUP);
+    }
+
+    private void sendSummary() {
+        long total = session.calculateElapsed();
+        DecimalFormat formatter = new DecimalFormat("00.##");
+        String line = CommonUtils.generateLine(60);
+
+        String minutes = formatter.format((int) (total / 60000));
+        String seconds = formatter.format((total % 60000) / 1000.0);
+
+        send("§8" + line);
+        send("§7击杀：§c" + session.getKills() + " §8| " + "§7得分：§a" + session.getScore());
+        send("§7游戏全程用时：§3" + minutes + ":" + seconds);
+        send("§8" + line);
     }
 }

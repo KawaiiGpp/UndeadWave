@@ -20,13 +20,11 @@ public class GameSession {
     private int coins;
     private int score;
 
-    private long startTime;
-    private long roundStartTime;
-
     private final List<UUID> aliveEnemies;
     private final int maxRound;
 
     private int currentRound;
+    private long startTime;
 
     public GameSession(UndeadWave plugin, Player owner) {
         Validate.notNull(plugin);
@@ -43,18 +41,9 @@ public class GameSession {
         this.startTime = System.currentTimeMillis();
     }
 
-    public void markRoundStartTime() {
-        this.roundStartTime = System.currentTimeMillis();
-    }
-
     public long calculateElapsed() {
         Validate.isTrue(startTime > 0, "Start time not set.");
         return System.currentTimeMillis() - startTime;
-    }
-
-    public long calculateRoundElapsed() {
-        Validate.isTrue(roundStartTime > 0, "Start time for a round not set.");
-        return System.currentTimeMillis() - roundStartTime;
     }
 
     public void increaseRoundCounter() {
