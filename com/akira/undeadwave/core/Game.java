@@ -71,6 +71,7 @@ public class Game extends GameBase {
         Validate.notNull(uniqueId);
 
         session.removeAliveEnemy(uniqueId);
+        updateExpBarProgress();
         if (!session.isRoundCleared()) return;
 
         if (session.isMaxRoundReached())
@@ -106,6 +107,7 @@ public class Game extends GameBase {
         int round = session.getCurrentRound();
 
         sendRoundMessage();
+        this.getIngamePlayer().setExp(1.0F);
 
         List<EnemyType> filteredEnemies = new ArrayList<>(Arrays.asList(EnemyType.values()));
         filteredEnemies.removeIf(e -> round < e.getAvailableRoundFrom() || round > e.getAvailableRoundTo());
@@ -219,14 +221,45 @@ public class Game extends GameBase {
     private void sendSummary() {
         long total = session.calculateElapsed();
         DecimalFormat formatter = new DecimalFormat("00.##");
-        String line = CommonUtils.generateLine(60);
 
         String minutes = formatter.format((int) (total / 60000));
         String seconds = formatter.format((total % 60000) / 1000.0);
+        String line = CommonUtils.generateLine(60);
+        String score = NumberUtils.format(session.getScore());
+
+        int totalKills = session.getKills();
+        int totalEnemies = this.getTotalEnemyAmount();
+        double ratio = (totalKills / (double) totalEnemies) * 100;
+        String kills = NumberUtils.format(totalKills);
+        String killsRatio = NumberUtils.format(ratio) + "%";
+        ChatColor color = ratio == 100 ? ChatColor.GOLD : ChatColor.WHITE;
 
         send("§8" + line);
-        send("§7击杀：§c" + session.getKills() + " §8| " + "§7得分：§a" + session.getScore());
+        send("§7击杀：§c" + kills + " " + color + "(" + killsRatio + ") §8| " + "§7得分：§a" + score);
         send("§7游戏全程用时：§3" + minutes + ":" + seconds);
         send("§8" + line);
+    }
+
+    private int getTotalEnemyAmount() {
+        SettingsConfig config = this.getSettingsConfig();
+
+        int maxRound = config.getMaxRound();
+        int per = config.getMonstersPerRound();
+
+        int result = 0;
+        for (int i = 1; i <= maxRound; i++)
+            result += per * i;
+
+        return result;
+    }
+
+    private void updateExpBarProgress() {
+        int multiplier = this.getSettingsConfig().getMonstersPerRound();
+        int max = session.getCurrentRound() * multiplier;
+        int current = session.getAliveEnemies().size();
+        Validate.isTrue(current <= max);
+
+        float progress = current / (float) max;
+        session.getOwner().setExp(progress);
     }
 }

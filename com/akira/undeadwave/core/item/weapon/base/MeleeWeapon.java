@@ -181,7 +181,7 @@ public abstract class MeleeWeapon extends Weapon {
         double maxHealth = EntityUtils.getMaxHealth(player);
 
         player.setHealth(Math.min(health + healing, maxHealth));
-        player.sendMessage("§f你刚刚窃取了 §d" + NumberUtils.format(healing) + "♥§f。");
+        player.sendMessage("§d生命掠夺！§f你刚刚窃取了 §d" + NumberUtils.format(healing) + "♥§f。");
         WorldUtils.playParticle(player.getEyeLocation(), Particle.HEART, 3, 0.5);
         PlayerUtils.playSound(player, Sound.ENTITY_ITEM_PICKUP, 2F);
     }
