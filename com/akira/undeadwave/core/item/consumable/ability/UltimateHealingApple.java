@@ -14,12 +14,12 @@ public class UltimateHealingApple extends ConsumableItem {
     }
 
     protected void onConsume(Player player) {
-        addPotionEffect(player, PotionEffectType.REGENERATION, 10, 3);
+        addPotionEffect(player, PotionEffectType.REGENERATION, 10, 2);
         healInstantly(player, 6);
         addAbsorption(player, 10);
     }
 
     protected List<String> getDescription() {
-        return List.of("瞬间恢复6♥并获生命恢复，", "持续10秒，等级III级，", "同时可吸收12点伤害。");
+        return List.of("瞬间恢复6♥并获生命恢复，", "持续10秒，等级II级，", "同时可吸收10点伤害。");
     }
 }

@@ -118,7 +118,7 @@ public abstract class ConsumableItem {
             if (existingLvl >= level) return;
         }
 
-        int ticks = (int) Math.ceil(duration / 20);
+        int ticks = (int) Math.ceil(duration * 20);
         PotionEffect effect = new PotionEffect(type, ticks, level - 1, false, false, false);
 
         player.removePotionEffect(type);

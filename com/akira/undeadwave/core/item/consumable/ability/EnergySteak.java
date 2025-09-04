@@ -15,8 +15,7 @@ public class EnergySteak extends ConsumableItem {
 
     protected void onConsume(Player player) {
         addPotionEffect(player, PotionEffectType.SPEED, 10, 2);
-        addPotionEffect(player, PotionEffectType.REGENERATION, 10, 2);
-        addAbsorption(player, 4);
+        addPotionEffect(player, PotionEffectType.REGENERATION, 20, 1);
     }
 
     protected List<String> getDescription() {
