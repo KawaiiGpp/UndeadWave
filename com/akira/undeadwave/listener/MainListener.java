@@ -5,6 +5,7 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.core.Game;
 import com.akira.undeadwave.core.GameState;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,7 +30,10 @@ public class MainListener extends ListenerBase {
 
         ConfigManager man = plugin.getConfigManager();
         LocationConfig config = (LocationConfig) man.fromString("location");
-        e.getPlayer().teleport(config.getLobby());
+        Player player = e.getPlayer();
+
+        player.setGameMode(GameMode.SURVIVAL);
+        player.teleport(config.getLobby());
     }
 
     @EventHandler

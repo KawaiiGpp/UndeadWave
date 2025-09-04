@@ -35,21 +35,21 @@ public class Game extends GameBase {
         this.state = GameState.STARTED;
 
         teleport(this.getLocationConfig().getSpawnpoint());
-        resetPlayerStat();
-        sendStartMessage();
+        sendGameStartMessages();
+        resetPlayerStats();
+        setupStartingGears();
         startInfoBarLoop();
 
-        setupStartingGears();
         startNextRound();
     }
 
     public void endGame(boolean victory) {
         validateState(GameState.STARTED);
 
-        sendEndMessage(victory);
         stopInfoBarLoop();
-        resetPlayerStat();
+        resetPlayerStats();
         teleport(this.getLocationConfig().getLobby());
+        sendGameEndMessage(victory);
 
         weaponManager.resetRangedWeaponCooldown();
         consumableItemManager.resetCooldown();
@@ -97,7 +97,7 @@ public class Game extends GameBase {
         LocationConfig locations = this.getLocationConfig();
         int round = session.getCurrentRound();
 
-        send("§f第 §2" + round + " §f回合开始了！");
+        sendRoundMessage();
 
         List<EnemyType> filteredEnemies = new ArrayList<>(Arrays.asList(EnemyType.values()));
         filteredEnemies.removeIf(e -> round < e.getAvailableRoundFrom() || round > e.getAvailableRoundTo());
@@ -131,8 +131,9 @@ public class Game extends GameBase {
         throw new UnsupportedOperationException("Unreachable code executed.");
     }
 
-    private void resetPlayerStat() {
+    private void resetPlayerStats() {
         Player player = this.getIngamePlayer();
+        player.setGameMode(GameMode.SURVIVAL);
 
         player.getActivePotionEffects().stream()
                 .map(PotionEffect::getType)
@@ -140,16 +141,13 @@ public class Game extends GameBase {
         player.getInventory().clear();
         player.closeInventory();
 
+        PlayerUtils.sendActionBarTitle(player, "");
         EntityUtils.setMaxHealth(player, 20);
         player.setHealth(EntityUtils.getMaxHealth(player));
-
         player.setAbsorptionAmount(0);
         player.setArrowsInBody(0);
-
         player.setExp(0);
         player.setLevel(0);
-
-        PlayerUtils.sendActionBarTitle(player, "");
     }
 
     private void setupStartingGears() {
@@ -162,13 +160,49 @@ public class Game extends GameBase {
         inventory.addItem(weaponManager.fromWeaponType(type).buildItem());
     }
 
-    private void sendStartMessage() {
-        send("§a游戏已经开始！");
-        playSound(Sound.ENTITY_PLAYER_LEVELUP);
+    private void sendGameStartMessages() {
+        String line = CommonUtils.generateLine(60);
+
+        send("§b游戏已经开始，祝你好运。");
+        send("§8" + line);
+        send("§7§o击杀所有对你虎视眈眈的怪物，并活下去。你会成功的。");
+        send("§7§o命令方块藏着珍贵的武器和道具，相信会对你帮助。");
+        send("§7§o探测器已配备，与最近僵尸的距离将显示在经验条的上方。");
+        send("§8" + line);
+
+        playSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F);
     }
 
-    private void sendEndMessage(boolean victory) {
-        playSound(victory ? Sound.ENTITY_ENDER_DRAGON_GROWL : Sound.ENTITY_WITHER_DEATH);
-        send("§a游戏结束，" + (victory ? "恭喜你赢了！" : "很遗憾你输了！"));
+    private void sendGameEndMessage(boolean victory) {
+        int round = session.getCurrentRound();
+
+        if (victory) {
+            sendTitle("§6恭喜胜利", "§f你坚持到了第 §a" + round + " §f回合");
+            send("§b恭喜你！你击杀了所有怪物，拯救了这片土地。");
+
+            playSound(Sound.ENTITY_PLAYER_LEVELUP);
+        } else {
+            sendTitle("§c游戏结束", "§f你坚持到了第 §c" + round + " §f回合");
+            send("§f你死了，游戏结束。你坚持到了第 §c" + round + " §f回合。");
+
+            playSound(Sound.BLOCK_ANVIL_LAND);
+        }
+    }
+
+    private void sendRoundMessage() {
+        int round = session.getCurrentRound();
+
+        SettingsConfig config = this.getSettingsConfig();
+        int max = config.getMaxRound();
+        int amount = config.getMonstersPerRound() * round;
+
+        String subTitle = round == max ?
+                "§f最后一波攻势，共 §e" + amount + " §f只" :
+                "§f目前共有 §e" + amount + " §f只怪物";
+        send("§f第 §c" + round + " §f回合开始！地图中共有 §e" + amount + " §f只怪物。");
+        sendTitle("§c第 " + round + " 回合", subTitle);
+
+        if (round == 1) return;
+        playSound(Sound.ENTITY_PLAYER_LEVELUP);
     }
 }

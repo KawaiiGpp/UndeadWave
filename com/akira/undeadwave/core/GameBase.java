@@ -291,6 +291,10 @@ public class GameBase {
         playSound(sound, 1.0F);
     }
 
+    protected final void sendTitle(String main, String subTitle) {
+        PlayerUtils.sendTitle(this.getIngamePlayer(), main, subTitle);
+    }
+
     private void doWorldPresets() {
         LocationConfig config = this.getLocationConfig();
 

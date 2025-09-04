@@ -37,8 +37,8 @@ public class UserCommandExecutor extends EnhancedExecutor {
                 return true;
             }
 
+            sender.sendMessage("§a正在加入游戏...");
             game.startGame(player);
-            sender.sendMessage("§a你已成功加入游戏。");
             return true;
         }
     }
@@ -62,8 +62,8 @@ public class UserCommandExecutor extends EnhancedExecutor {
                 return true;
             }
 
+            sender.sendMessage("§a正在退出游戏...");
             game.endGame(false);
-            sender.sendMessage("§a你已成功退出游戏。");
             return true;
         }
     }
