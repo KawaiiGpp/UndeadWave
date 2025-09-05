@@ -6,7 +6,10 @@ import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.config.SettingsConfig;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,9 @@ public class GameSession {
     private int currentRound;
     private long startTime;
 
+    private int dropSlot;
+    private BukkitTask dropConfirmTask;
+
     public GameSession(UndeadWave plugin, Player owner) {
         Validate.notNull(plugin);
         Validate.notNull(owner);
@@ -35,6 +41,23 @@ public class GameSession {
 
         this.aliveEnemies = new ArrayList<>();
         this.maxRound = this.getSettingsConfig().getMaxRound();
+
+        this.dropSlot = -1;
+    }
+
+    public boolean tryDropItem(int slot) {
+        if (dropConfirmTask != null) dropConfirmTask.cancel();
+
+        if (dropSlot != slot) {
+            BukkitScheduler scheduler = Bukkit.getScheduler();
+
+            dropSlot = slot;
+            dropConfirmTask = scheduler.runTaskLater(plugin, this::resetDropConfirm, 40);
+            return false;
+        } else {
+            resetDropConfirm();
+            return true;
+        }
     }
 
     public void markStartTime() {
@@ -133,5 +156,10 @@ public class GameSession {
 
     private SettingsConfig getSettingsConfig() {
         return (SettingsConfig) this.getConfig("settings");
+    }
+
+    private void resetDropConfirm() {
+        this.dropSlot = -1;
+        this.dropConfirmTask = null;
     }
 }

@@ -1,22 +1,29 @@
 package com.akira.undeadwave.listener;
 
 import com.akira.core.api.config.ConfigManager;
+import com.akira.core.api.util.PlayerUtils;
 import com.akira.undeadwave.UndeadWave;
 import com.akira.undeadwave.config.LocationConfig;
 import com.akira.undeadwave.core.Game;
+import com.akira.undeadwave.core.GameSession;
 import com.akira.undeadwave.core.GameState;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.PlayerInventory;
 
 public class MainListener extends ListenerBase {
     public MainListener(UndeadWave plugin) {
@@ -52,6 +59,30 @@ public class MainListener extends ListenerBase {
     public void onInteract(PlayerInteractEvent e) {
         if (this.isInLobby(e.getPlayer()))
             e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventory(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player player)) return;
+        if (!this.isIngamePlayer(player)) return;
+
+        ClickType click = e.getClick();
+        if (click != ClickType.DROP && click != ClickType.CONTROL_DROP) return;
+
+        Inventory clickedInventory = e.getClickedInventory();
+        PlayerInventory inventory = player.getInventory();
+        if (!inventory.equals(clickedInventory)) return;
+
+        int slot = e.getSlot();
+        GameSession session = plugin.getGame().getSession();
+        if (session.tryDropItem(slot)) {
+            player.sendMessage("§a你已成功移除该物品。");
+            PlayerUtils.playSound(player, Sound.ENTITY_ITEM_PICKUP);
+
+            inventory.setItem(slot, null);
+        } else player.sendMessage("§c请重复此操作以确认移除。");
+
+        e.setCancelled(true);
     }
 
     @EventHandler
